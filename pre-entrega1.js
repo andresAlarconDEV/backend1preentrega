@@ -1,5 +1,11 @@
 const { promises: fs } = require('fs');
+const express = require('express');
 
+const app = express();
+app.use(express.urlencoded({ extended:true}));
+app.listen(8080,() => {
+    console.log('Servidor HTTP escuchando el puerto 8080');
+})
 
 class ProductManager {
 
@@ -10,7 +16,6 @@ class ProductManager {
 
     async addProduct(title, description, price, thumbnail, code, stock) {
         this.products = await getJSONFromFile(this.path);
-        console.log(this.products);
         let codeExist = this.products.find(e => e.code === code);
         if (!codeExist) {
             if (title && description && price && thumbnail && code && stock) {
@@ -100,22 +105,44 @@ const getJSONFromFile = async (path) => {
         throw new Error(`El archivo ${path} no tiene un formato JSON válido.`);
     }
 }
+const products = new ProductManager('./files/products.json');
+const num = [1,2,3,4,5,6,7,8,9,10]
 
+// const runTest = async () => {
+//     try {        
+//         // console.log(await products.get())
+//         //await products.addProduct("producto prueba", "Este es un producto prueba", "200", "sin imagen", "abc123", "25")
+//         //console.log(await getJSONFromFile())
+//         //await products.addProduct("producto prueba", "Este es un producto prueba", "400", "sin imagen", "abc123", "25")
+//         //console.log(await products.getProductById(1));
+//         // await products.updateProduct(1, { title: 'actualizacion de prueba test', stock: '100' })
+//         // await products.deleteProduct(1);
+//     }
+//     catch (error) {
+//         console.error('Ha ocurrido un error', error.message);
+//     }
+// }
 
-const runTest = async () => {
-    try {
-        const products = new ProductManager('./files/products.json');
-        console.log(await getJSONFromFile())
-        await products.addProduct("producto prueba", "Este es un producto prueba", "200", "sin imagen", "abc123", "25")
-        console.log(await getJSONFromFile())
-        await products.addProduct("producto prueba", "Este es un producto prueba", "400", "sin imagen", "abc123", "25")
-        console.log(await products.getProductById(1));
-        // await products.updateProduct(1, { title: 'actualizacion de prueba test', stock: '100' })
-        // await products.deleteProduct(1);
+// runTest();
+
+app.get('/products',async (req, res) => {
+    const { query } = (req);
+    const { limit } = query;
+    console.log(limit)
+    if (limit) {
+        const arrayProduct = await products.get();
+        res.status(200).json(arrayProduct.slice(0,(limit)));
+    } else {
+        res.status(200).json(await products.get());
     }
-    catch (error) {
-        console.error('Ha ocurrido un error', error.message);
-    }
-}
+});
 
-runTest()
+app.get('/products/:pid',async (req, res) => {
+    const arrayProduct = await products.get();
+    const { pid } = req.params;  
+    const product = arrayProduct.find((p) => {
+        return p.id === parseInt(pid)
+    });
+    product ? res.status(200).json(product) : res.status(404).json({error: 'Usuario no encontrado'});
+});
+

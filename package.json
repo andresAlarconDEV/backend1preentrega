@@ -1,0 +1,16 @@
+{
+  "name": "1rapreentrega",
+  "version": "1.0.0",
+  "description": "PreEntrega ",
+  "main": "pre-entrega1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Victor Andres Alarcon",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  }
+}
