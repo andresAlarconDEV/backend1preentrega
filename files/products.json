@@ -7,5 +7,23 @@
 		"thumbnail": "sin imagen",
 		"code": "abc123",
 		"stock": "25"
+	},
+	{
+		"id": 2,
+		"title": "producto prueba 2",
+		"description": "Este es un producto prueba",
+		"price": "200",
+		"thumbnail": "sin imagen",
+		"code": "abc124",
+		"stock": "25"
+	},
+	{
+		"id": 3,
+		"title": "producto prueba 3",
+		"description": "Este es un producto prueba",
+		"price": "200",
+		"thumbnail": "sin imagen",
+		"code": "abc125",
+		"stock": "25"
 	}
 ]
