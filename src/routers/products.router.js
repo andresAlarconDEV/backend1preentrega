@@ -10,29 +10,26 @@ class ProductManager {
         this.path = path;
     }
 
-    async addProduct(title, description, price, thumbnail, code, stock) {
+    async addProduct(body) {
         this.products = await getJSONFromFile(this.path);
+        const {title, description, price, code, stock, status, category, thumbnail} = body;
         let codeExist = this.products.find(e => e.code === code);
         if (!codeExist) {
-            if (title && description && price && thumbnail && code && stock) {
-                this.products.push({
+            if (title && description && price && code && stock && status && category) {
+                const newProduct = {
+                    ...body,
                     id: (this.products.length > 0 ? this.products[this.products.length - 1].id + 1 : 1),
-                    title,
-                    description,
-                    price,
-                    thumbnail,
-                    code,
-                    stock
+                    status: 1
                 }
-                )
+                this.products.push(newProduct)
                 await saveJSONToFile(this.path, this.products);
+                return newProduct;
             } else {
                 throw new Error('Todos los campos son obligatorios.');
             }
         } else {
-            console.error(`El producto con codigo ${code} ya se encuentra creado`)
+            throw new Error('el producto con codigo ' + code + ' ya se encuentra creado');
         }
-        return
     }
 
     getProducts() {
@@ -41,35 +38,41 @@ class ProductManager {
 
     async getProductById(id) {
         this.products = await getJSONFromFile(this.path);
-        let productExist = this.products.find(e => e.id === id);
+        let productExist = this.products.find(e => e.id === parseInt(id));
         if (productExist) { return productExist }
         else {
-            console.error(`Not found`)
+            throw new Error ('No existe el producto con el ID '+ id);
         }
-
     }
 
     async updateProduct(id, objectUpdate) {
         this.products = await getJSONFromFile(this.path);
-        let product = this.products.find(product => product.id === id);
+        let product = this.products.find(product => product.id === parseInt(id));
         if (product) {
             const keysUpdate = Object.keys(objectUpdate);
             keysUpdate.map((e) => {
-                (e in product) ? product[e] = objectUpdate[e] : console.error('No existe la clave a actualizar', e)
+                if (e in product && e !== "id") {
+                    product[e] = objectUpdate[e]
+                } else {
+                    throw new Error('No existe el campo a actualizar "'+ e + '"')
+                }
             });
             await saveJSONToFile(this.path, this.products);
             return product;
         } else {
-            throw new Error('No existe el producto con el ID ', id);
+            throw new Error('No existe el producto con el ID '+ id);
         }
     }
 
     async deleteProduct(id) {
         this.products = await getJSONFromFile(this.path);
-        let product = this.products.find(product => product.id === id);
-        let ind = this.products.indexOf(product);
-        this.products.splice(ind, 1);
-        await saveJSONToFile(this.path, this.products);
+        let product = this.products.find(product => product.id === parseInt(id));
+        if (product) {
+            this.products = this.products.filter(product => product.id !== parseInt(id));
+            await saveJSONToFile(this.path, this.products);
+        }else {
+            throw new Error('No existe el producto con el ID '+ id);
+        }
         return;
     }
 
@@ -105,7 +108,6 @@ const getJSONFromFile = async (path) => {
 router.get('/products',async (req, res) => {
     const { query } = (req);
     const { limit } = query;
-    console.log(limit)
     if (limit) {
         const arrayProduct = await products.get();
         res.status(200).json(arrayProduct.slice(0,(limit)));
@@ -114,16 +116,66 @@ router.get('/products',async (req, res) => {
     }
 });
 
+
 router.get('/products/:pid',async (req, res) => {
-    const arrayProduct = await products.get();
     const { pid } = req.params;  
-    const product = arrayProduct.find((p) => {
-        return p.id === parseInt(pid)
-    });
-    product ? res.status(200).json(product) : res.status(404).json({error: 'Producto no encontrado'});
+    try {
+        res.status(200).json(await products.getProductById(pid))
+    }
+    catch(error) {
+        res.status(404).send(error.message);
+            }
+});
+
+router.post('/products',async (req, res) => {
+    const { body } = req;
+    try {
+        res.status(201).json(await products.addProduct(body));
+    }
+    catch(error) {
+        res.status(400).send(error.message);
+    }
+});
+
+router.put('/products/:pid',async (req, res) => {
+    const { pid } = req.params; 
+    const { body } = req;
+    try {
+        res.status(201).json(await products.updateProduct(pid, body));
+    }
+    catch(error) {
+        res.status(400).send(error.message);
+    }
+});
+
+router.delete('/products/:pid',async (req, res) => {
+    const { pid } = req.params;
+    try {
+        res.status(201).json(await products.deleteProduct(pid));
+    }
+    catch(error){
+        res.status(404).send(error.message);
+    }
 });
 
 const products = new ProductManager('./files/products.json');
+
+// const runTest = async () => {
+//     try {        
+//         // console.log(await products.get())
+//         //await products.addProduct("producto prueba", "Este es un producto prueba", "200", "sin imagen", "abc123", "25")
+//         //console.log(await getJSONFromFile())
+//         //await products.addProduct("producto prueba", "Este es un producto prueba", "400", "sin imagen", "abc123", "25")
+//         console.log(await products.getProductById(4));
+//         // await products.updateProduct(1, { title: 'actualizacion de prueba test', stock: '100' })
+//         // await products.deleteProduct(1);
+//     }
+//     catch (error) {
+//         console.error('Ha ocurrido un error:', error.message);
+//     }
+// }
+
+// runTest();
 
 
 module.exports = router;
