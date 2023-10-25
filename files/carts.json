@@ -25,7 +25,11 @@
 			},
 			{
 				"idProduct": 2,
-				"quantity": 1
+				"quantity": 3
+			},
+			{
+				"idProduct": 1,
+				"quantity": 2
 			}
 		]
 	},
