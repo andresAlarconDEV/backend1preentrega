@@ -1,4 +1,5 @@
-const { promises: fs } = require('fs');
+// const { promises: fs } = require('fs');
+import { promises  as fs } from 'fs';
 
 
 class ProductManager {
@@ -8,16 +9,18 @@ class ProductManager {
         this.path = path;
     }
 
-    async addProduct(body) {
+    async addProduct(body, img) {
         this.products = await getJSONFromFile(this.path);
         const {title, description, price, code, stock, status, category, thumbnail} = body;
         let codeExist = this.products.find(e => e.code === code);
         if (!codeExist) {
+            console.log(body)
             if (title && description && price && code && stock && status && category) {
                 const newProduct = {
                     id: (this.products.length > 0 ? this.products[this.products.length - 1].id + 1 : 1),
                     ...body,
-                    status: 1
+                    status: 1,
+                    thumbnail: img
                 }
                 this.products.push(newProduct)
                 await saveJSONToFile(this.path, this.products);
@@ -74,7 +77,7 @@ class ProductManager {
         return;
     }
 
-    async get() {
+    get() {
         return getJSONFromFile(this.path);
     }
 
@@ -106,4 +109,5 @@ const getJSONFromFile = async (path) => {
 const products = new ProductManager('./files/products.json');
 
 
-module.exports = products;
+// module.exports = products;
+export default products;

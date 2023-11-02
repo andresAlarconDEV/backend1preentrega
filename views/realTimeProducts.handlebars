@@ -1,0 +1,56 @@
+<h1>Lista en Tiempo Real de Productos</h1>
+<form class="row g-3" id="form-addProducts">
+    <div class="col-md-4">
+        <label for="code" class="form-label">Codigo</label>
+        <input type="text" class="form-control" id="code">
+    </div>
+    <div class="col-md-4">
+        <label for="title" class="form-label">Titulo</label>
+        <input type="text" class="form-control" id="title">
+    </div>
+    <div class="col-md-4">
+        <label for="description" class="form-label">Descripción</label>
+        <input type="text" class="form-control" id="description">
+    </div>
+    <div class="col-md-4">
+        <label for="price" class="form-label">Precio</label>
+        <input type="text" class="form-control" id="price">
+    </div>
+    <div class="col-md-4">
+        <label for="category" class="form-label">Categoria</label>
+        <input type="text" class="form-control" id="category">
+    </div>
+    <div class="col-md-2">
+        <label for="stock" class="form-label">Stock</label>
+        <input type="text" class="form-control" id="stock">
+    </div>
+    <div class="col-md-2">
+        <label for="status" class="form-label">Estado</label>
+        <select id="status" class="form-select">
+            <option selected value="1">Activo</option>
+            <option value="0">Inactivo</option>
+        </select>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary" value="Enviar">Enviar</button>
+    </div>
+</form>
+<h1>Lista General de Productos</h1>
+<table class="table table-info table-striped" id="tableProducts">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col">codigo</th>
+            <th scope="col">categoria</th>
+            <th scope="col">Titulo</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Eliminar</th>
+        </tr>
+    </thead>
+    <tbody id="bodyTableProducts">
+
+    </tbody>
+</table>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/index.js"></script>

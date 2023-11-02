@@ -1,64 +1,68 @@
-const {Router} = require('express');
-const products = require("../productManager")
+// const { Router } = require('express');
+import { Router } from 'express';
+// const products = require("../productManager");
+import products from "../productManager.js";
+// const { upload } = require("../utils");
+// import { upload } from "../utils.js";
 
 
 const router = Router();
 
-router.get('/products',async (req, res) => {
+router.get('/products', async (req, res) => {
     const { query } = (req);
     const { limit } = query;
     if (limit) {
         const arrayProduct = await products.get();
-        res.status(200).json(arrayProduct.slice(0,(limit)));
+        res.status(200).json(arrayProduct.slice(0, (limit)));
     } else {
         res.status(200).json(await products.get());
     }
 });
 
 
-router.get('/products/:pid',async (req, res) => {
-    const { pid } = req.params;  
+router.get('/products/:pid', async (req, res) => {
+    const { pid } = req.params;
     try {
         res.status(200).json(await products.getProductById(pid))
     }
-    catch(error) {
+    catch (error) {
         res.status(404).send(error.message);
-            }
+    }
 });
 
-router.post('/products',async (req, res) => {
+router.post('/products', async (req, res) => {
     const { body } = req;
+    const img = req.file.path;
     try {
-        res.status(201).json(await products.addProduct(body));
+        res.status(201).json(await products.addProduct(body, img));
     }
-    catch(error) {
+    catch (error) {
         res.status(400).send(error.message);
     }
 });
 
-router.put('/products/:pid',async (req, res) => {
-    const { pid } = req.params; 
+router.put('/products/:pid', async (req, res) => {
+    const { pid } = req.params;
     const { body } = req;
     try {
         res.status(201).json(await products.updateProduct(pid, body));
     }
-    catch(error) {
+    catch (error) {
         res.status(400).send(error.message);
     }
 });
 
-router.delete('/products/:pid',async (req, res) => {
+router.delete('/products/:pid', async (req, res) => {
     const { pid } = req.params;
     try {
         res.status(201).json(await products.deleteProduct(pid));
     }
-    catch(error){
+    catch (error) {
         res.status(404).send(error.message);
     }
 });
 
+// module.exports = router;
 
-
-
-module.exports = router;
+export default router;
 

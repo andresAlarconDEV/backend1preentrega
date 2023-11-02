@@ -1,12 +1,14 @@
-const { Router } = require('express');
-const { promises: fs } = require('fs');
-const products = require("../productManager")
+// const { Router } = require('express');
+import Router  from 'express';
+// const { promises: fs } = require('fs');
+import { promises  as fs } from 'fs';
+// const products = require("../productManager");
+import products from "../productManager.js";
 
 
 const router = Router();
 
 class CartManager {
-
 
     constructor(path) {
         this.carts = [];
@@ -114,4 +116,6 @@ router.post('/carts/:cid/product/:pid', async (req, res) => {
 
 const carts = new CartManager('./files/carts.json');
 
-module.exports = router;
+// module.exports = router;
+
+export default router;
