@@ -21,9 +21,9 @@ app.set('views', path.join(__dirname , 'views'));
 app.set('view engine', 'handlebars');
 
 
-app.use('/', homeRouter);
 app.use('/api', productRouter, cartRouter);
 app.use('/realtimeproducts', realTimeProductsRouter);
+app.use('/', homeRouter);
 
 app.use((error, req, res, next) => {
     const message = 'ocurrio un error desconocido: '+error.message;
