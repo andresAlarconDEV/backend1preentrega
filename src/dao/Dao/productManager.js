@@ -1,4 +1,3 @@
-// const { promises: fs } = require('fs');
 import { promises  as fs } from 'fs';
 
 
@@ -109,5 +108,4 @@ const getJSONFromFile = async (path) => {
 const products = new ProductManager('./files/products.json');
 
 
-// module.exports = products;
 export default products;

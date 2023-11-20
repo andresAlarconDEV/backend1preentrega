@@ -1,12 +1,12 @@
 import { Server } from "socket.io";
-import products from "../src/productManager.js";
+import products from "./dao/Dao/productManager.js";
 
 
 let io;
 
 const listProducts = await products.get();
 
-export const init = (httpserver) => {
+export const initSocket = (httpserver) => {
 
     io = new Server(httpserver);
 

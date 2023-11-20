@@ -47,9 +47,9 @@
                 const array = Array.from(botones);
                 array.map((e)=> {
                     let btn = document.getElementById(e.id);
-                    console.log(btn);
+                    // console.log(btn);
                     btn.addEventListener('click', () => {
-                        console.log('click en boton # ' , e.value);
+                        // console.log('click en boton # ' , e.value);
                         socket.emit('deleteProduct', (e.value));
                         });
                 });

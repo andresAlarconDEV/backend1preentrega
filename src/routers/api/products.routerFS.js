@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import products from "../productManager.js";
+// import ProductManager from "../dao/productManager.js";
+import products from '../../dao/Dao/productManager.js';
 
 
 const router = Router();
@@ -58,7 +59,7 @@ router.delete('/products/:pid', async (req, res) => {
     }
 });
 
-// module.exports = router;
+
 
 export default router;
 

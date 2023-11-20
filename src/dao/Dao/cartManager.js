@@ -1,9 +1,4 @@
-import { Router } from 'express';
 import { promises  as fs } from 'fs';
-import products from "../productManager.js";
-
-
-const router = Router();
 
 class CartManager {
 
@@ -82,37 +77,6 @@ const getJSONFromFile = async (path) => {
     }
 }
 
-router.get('/carts/:cid', async (req, res) => {
-    const { cid } = req.params;
-    try {
-        res.status(200).json(await carts.getCartById(cid))
-    }
-    catch (error) {
-        res.status(404).send(error.message);
-    }
-});
-
-router.post('/carts', async (req, res) => {
-    try {
-        res.status(201).json(await carts.addCart());
-    }
-    catch (error) {
-        res.status(400).send(error.message);
-    }
-});
-
-router.post('/carts/:cid/product/:pid', async (req, res) => {
-    const { cid, pid } = req.params;
-    try {
-        res.status(201).json(await carts.addProductInCart(cid, pid));
-    }
-    catch (error) {
-        res.status(404).send(error.message);
-    }
-});
-
 const carts = new CartManager('./files/carts.json');
 
-// module.exports = router;
-
-export default router;
+export default carts;
