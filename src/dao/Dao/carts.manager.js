@@ -25,7 +25,7 @@ export default class CartsManager {
             let cartExist = await CartModel.findById(cid);
             if (cartExist) {
 
-            const updateProductCart = await CartModel.updateOne({$and:[{ '_id': cid },{'products.idProduct':pid}]},{ $inc: {'products.0.quantity': 1 } } )
+            const updateProductCart = await CartModel.updateOne({$and:[{ '_id': cid },{'products.idProduct':pid}]},{ $inc: {'products.$.quantity': 1 } } )
                 if (updateProductCart.modifiedCount) {
                     return 'Se Adiciono correctamente el valor';
                 } else {
