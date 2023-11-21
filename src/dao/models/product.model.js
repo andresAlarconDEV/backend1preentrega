@@ -8,7 +8,7 @@ const ProductSchema = new mongoose.Schema({
     price: {type: Number, required: true},
     stock: {type: Number, required: true},
     thumbnail: {type: String, required: false},
-    status: {type: Number, required: true}
+    status: {type: Boolean, required: true}
 }, {timestamps: true});
 
 export default mongoose.model('Product', ProductSchema);
