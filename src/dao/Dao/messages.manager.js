@@ -1,9 +1,8 @@
-import productModel from '../models/messages.model.js'
+import MessageModel from '../models/message.model.js';
 
-export default class productModel {
+export default class MessagesManager {
+
     static get() {
-        return productModel.find();
-    }
-
-    
+        return MessageModel.find();
+    };   
 }

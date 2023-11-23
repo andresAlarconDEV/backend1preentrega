@@ -55,5 +55,9 @@
                 });
         });
 
+        socket.on('chats', (chatHistory) => {
+            console.log( chatHistory);
+        });
+
     })();
 

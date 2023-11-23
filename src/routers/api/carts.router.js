@@ -4,7 +4,6 @@ import CartsManager from '../../dao/Dao/carts.manager.js';
 const router = Router();
 
 router.get('/carts', async (req, res) => {
-    console.log("log por aqui")
         res.status(200).json(await CartsManager.get());
 });
 

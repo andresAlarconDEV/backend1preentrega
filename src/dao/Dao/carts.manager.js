@@ -8,7 +8,7 @@ export default class CartsManager {
     }
 
     static getCartById(cid) {
-        return CartModel.findById(cid);
+        return CartModel.find({_id: cid});
     };
 
     static async addCart() {

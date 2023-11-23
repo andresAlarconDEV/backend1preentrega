@@ -1,10 +1,13 @@
 import { Server } from "socket.io";
 import products from "./dao/Dao/productManager.js";
+import MessagesManager from "./dao/Dao/Messages.manager.js";
+import ProductsManager from './dao/Dao/products.Manager.js';
+import MessageModel from './dao/models/message.model.js';
 
 
 let io;
-
 const listProducts = await products.get();
+
 
 export const initSocket = (httpserver) => {
 
@@ -15,7 +18,6 @@ export const initSocket = (httpserver) => {
 
 
         socketClient.emit('products', listProducts);
-
 
         socketClient.on('newProduct', async (newProduct) => {
             await products.addProduct(newProduct)
