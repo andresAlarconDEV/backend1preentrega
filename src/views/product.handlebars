@@ -1,0 +1,32 @@
+<H1>Listado de Productos</H1>
+<table class="table table-info table-striped">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col">codigo</th>
+            <th scope="col">categoria</th>
+            <th scope="col">Titulo</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each payload}}
+        {{#if this.status}}
+        <tr>
+            <th scope="row">{{this.code}}</th>
+            <td>{{this.category}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.stock}}</td>
+        </tr>
+        {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+<container class="buttonPage" style="display: flex; margin: auto; width: 90%; justify-content: center;">
+<a class="btn btn-primary {{#if this.hasPrevPage}}enabled{{else}}disabled{{/if}}" href={{this.prevLink}} role="button">Anterior</a>
+<div style="width: 100px;text-align: center;">Pagina: {{this.page}}</div></DUV>
+<a class="btn btn-primary {{#if this.hasNextPage}}enabled{{else}}disabled{{/if}}" href={{this.nextLink}} role="button">Siguiente</a>
+</container>

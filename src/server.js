@@ -3,7 +3,7 @@ import app from "./app.js";
 import { initSocket } from "./socket.js";
 const server = http.createServer(app);
 import { init } from './db/mongodb.js';
-// import cartModel from "./dao/models/cart.model.js";
+
 
 const PORT = 8080;
 

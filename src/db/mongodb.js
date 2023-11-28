@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import messageModel from '../dao/models/message.model.js';
 
 const URI = 'mongodb+srv://developer:wtBxuyWSvYBsThkW@cluster0.zs9frjx.mongodb.net/ecommerce';
 

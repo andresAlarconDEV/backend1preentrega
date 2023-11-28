@@ -1,8 +1,23 @@
 import ProductModel from '../models/product.model.js';
+import { buildResponsePaginated } from '../../utils2.js';
 
 export default class ProductsManager {
-    static get() {
-        return ProductModel.find();
+    static async get(query, endpoint) {
+                const { limit=10, page=1, sort, search } = query;
+        // sort por price, ASC/DESC
+        // search por category
+        const criteria = {};
+        const options = { limit, page };
+        if (sort) {
+            options.sort = {price: sort};
+        }
+        if (search){
+            criteria.category = search;
+        }
+        const result = await ProductModel.paginate(criteria, options);
+        // console.log(result);
+        const responsePaginate = buildResponsePaginated({...result, options, criteria , endpoint });
+        return responsePaginate;
     }
 
     static getProductById(pid) {

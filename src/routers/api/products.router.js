@@ -4,14 +4,10 @@ import ProductsManager from '../../dao/Dao/products.Manager.js';
 const router = Router();
 
 router.get('/products', async (req, res) => {
+    const endpoint = 'products/api/';
     const { query } = (req);
-    const { limit } = query;
-    if (limit) {
-        const arrayProduct = await ProductsManager.get();
-        res.status(200).json(arrayProduct.slice(0, (limit)));
-    } else {
-        res.status(200).json(await ProductsManager.get());
-    }
+        res.status(200).json(await ProductsManager.get(query, endpoint));
+
 });
 
 
