@@ -24,4 +24,13 @@ export const buildResponsePaginated = (data) => {
 }
 };
 
+export const buildResponseProductsInCart = (data) => {
+    const dataTemp = data[0];
+    const { _id , products } = dataTemp;
+    return {
+        _id,
+        products: products.map((e) => e.toJSON())
+    }
+};
+
 export const __dirname = path.dirname(__filename);

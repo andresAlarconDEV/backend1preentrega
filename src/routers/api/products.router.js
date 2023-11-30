@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import ProductsManager from '../../dao/Dao/products.Manager.js';
-
+import ProductsManager from '../../dao/Dao/Products.manager.js';
 const router = Router();
 
 router.get('/products', async (req, res) => {
-    const endpoint = 'products/api/';
+    const endpoint = 'products/api/'; 
     const { query } = (req);
         res.status(200).json(await ProductsManager.get(query, endpoint));
 

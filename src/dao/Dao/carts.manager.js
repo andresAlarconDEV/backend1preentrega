@@ -15,7 +15,7 @@ export default class CartsManager {
         const newCart = { 'products': [] }
         const productCreate = await CartModel.create(newCart);
         return productCreate;
-    }
+    };
 
     static async addProductInCart(cid, pid) {
         let productExist = await ProductModel.exists({ _id: pid });
@@ -25,7 +25,7 @@ export default class CartsManager {
             let cartExist = await CartModel.findById(cid);
             if (cartExist) {
 
-            const updateProductCart = await CartModel.updateOne({$and:[{ '_id': cid },{'products.idProduct':pid}]},{ $inc: {'products.$.quantity': 1 } } )
+            const updateProductCart = await CartModel.updateOne({$and:[{ '_id': cid },{'products.idProduct':pid}]},{ $inc: {'products.$.quantity': 1 } } );
                 if (updateProductCart.modifiedCount) {
                     return 'Se Adiciono correctamente el valor';
                 } else {
@@ -42,8 +42,46 @@ export default class CartsManager {
         } else {
             throw new Error('El producto con id ' + cid + 'no existe en Productos');
         }
+    };
+
+    static async deleteProductInCart(cid, pid) {
+        const cart = await CartModel.findById(cid);
+        const position = cart.products.findIndex((e) => {
+            return e.idProduct == pid;
+        });
+        if (position === -1) {
+            throw new Error('No existe el producto en el carrito con el ID ' + pid);
+        }
+        const product = cart.products.splice(position,1);
+        await CartModel.updateOne({_id: cid}, cart);
+        return product;
+    };
+
+    static async putCart(cid, body) {
+        const modify = await CartModel.updateOne({ _id: cid}, {$set:{"products": body }} );
+        if(modify.matchedCount) {
+            return modify;
+        } else {
+            throw new Error('No existe el  carrito con el ID ' + cid);
+        }
+    };
+
+    static async putProductInCart (cid, pid, body){
+        const { quantity } = body;
+        const modify = await CartModel.updateOne({$and:[{ '_id': cid },{'products.idProduct':pid}]},{ $set: {'products.$.quantity': quantity } });
+        if(modify.matchedCount) {
+            return modify;
+        } else {
+            throw new Error('No existe el producto en el carrito con el ID ' + pid);
+        }
+    };
+    
+    static async deleteInCart(cid) {
+        const modify = await CartModel.updateOne({ _id: cid}, {$set:{"products": [] }} );
+        if(modify.matchedCount) {
+            return modify;
+        } else {
+            throw new Error('No existe el carrito con el ID ' + cid);
+        }
     }
-
-
-
 }

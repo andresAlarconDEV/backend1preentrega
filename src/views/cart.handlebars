@@ -1,0 +1,29 @@
+<H1>{{title}}{{_id}}</H1>
+<table class="table table-info table-striped">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col">codigo</th>
+            <th scope="col">categoria</th>
+            <th scope="col">Titulo</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Stock</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+        {{#if this.idProduct.status}}
+        <tr>
+            <th scope="row">{{this.idProduct.code}}</th>
+            <td>{{this.idProduct.category}}</td>
+            <td>{{this.idProduct.title}}</td>
+            <td>{{this.idProduct.description}}</td>
+            <td>{{this.idProduct.price}}</td>
+            <td>{{this.idProduct.stock}}</td>
+            <td><button type="button" class="btn btn-primary btn-sm">Eliminar del carrito</button></td>
+        </tr>
+        {{/if}}
+        {{/each}}
+    </tbody>
+</table>
