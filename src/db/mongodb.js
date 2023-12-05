@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const URI = 'mongodb+srv://developer:wtBxuyWSvYBsThkW@cluster0.zs9frjx.mongodb.net/ecommerce';
+export const URI = 'mongodb+srv://developer:wtBxuyWSvYBsThkW@cluster0.zs9frjx.mongodb.net/ecommerce';
 
 export const init = async () => {
     try {

@@ -1,0 +1,28 @@
+<div class="wrapper">
+    <div class="logo">
+        <img src="http://localhost:8080/img/icono.png" alt="">
+    </div>
+    <div class="text-center mt-4 name">
+        BikeShop
+    </div>
+    {{#if failed}}
+    <div><p style="color: rgb(129, 44, 44)">{{message}}</p></div>
+    {{/if}}
+    {{#if createOK}}
+    <div><p style="color: green">{{message}}</p></div>
+    {{/if}}
+    <form class="p-3 mt-3" action="/api/sessions/login" method="post">
+        <div class="form-field d-flex align-items-center">
+            <span class="far fa-user"></span>
+            <input type="email" name="email" id="email" placeholder="Email" required>
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <span class="fas fa-key"></span>
+            <input type="password" name="password" id="password" placeholder="Contraseña" required>
+        </div>
+        <button class="btn mt-3" type="submit">Ingresar</button>
+    </form>
+    <div class="text-center fs-6">
+        <a href="/register">Registrarse</a>
+    </div>
+</div>

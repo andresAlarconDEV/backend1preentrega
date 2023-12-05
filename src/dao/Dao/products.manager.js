@@ -3,7 +3,7 @@ import { buildResponsePaginated } from '../../utils2.js';
 
 export default class ProductsManager {
     static async get(query, endpoint) {
-                const { limit=10, page=1, sort, search } = query;
+                const { limit=4, page=1, sort, search } = query;
         // sort por price, ASC/DESC
         // search por category
         const criteria = {};
@@ -15,7 +15,6 @@ export default class ProductsManager {
             criteria.category = search;
         }
         const result = await ProductModel.paginate(criteria, options);
-        // console.log(result);
         const responsePaginate = buildResponsePaginated({...result, options, criteria , endpoint });
         return responsePaginate;
     }
@@ -48,7 +47,6 @@ export default class ProductsManager {
 
     static async updateProduct(pid, objectUpdate) {
         let product = await ProductModel.findById(pid);
-        console.log(product);
         if (product) {
             const keysUpdate = Object.keys(objectUpdate);
             keysUpdate.map((e) => {

@@ -1,8 +1,19 @@
+<container>
+    <header>
+        <h1>Te damos la bienvenida 😁</h1>
+        <a href="/logout" role="button" class="buttonLogout">Salir</a>
+    </header>
+    <p><strong>Nombre:</strong> {{user.first_name}}</p>
+    <p><strong>Apellido:</strong> {{user.last_name}}</p>
+    <p><strong>Correo:</strong> {{user.email}}</p>
+    <p><strong>Edad:</strong> {{user.age}}</p>
+    <p><strong>Rol:</strong> {{user.role}}</p>
+</container>
 <H1>Listado de Productos</H1>
 <table class="table table-info table-striped">
     <thead>
         <tr class="table-dark">
-            <th scope="col">codigo</th>
+            {{#if user.isAdmin}}<th scope="col">codigo</th> {{/if}}
             <th scope="col">categoria</th>
             <th scope="col">Titulo</th>
             <th scope="col">Descripción</th>
@@ -28,7 +39,10 @@
     </tbody>
 </table>
 <container class="buttonPage" style="display: flex; margin: auto; width: 90%; justify-content: center;">
-<a class="btn btn-primary {{#if this.hasPrevPage}}enabled{{else}}disabled{{/if}}" href={{this.prevLink}} role="button">Anterior</a>
-<div style="width: 100px;text-align: center;">Pagina: {{this.page}}</div></DUV>
-<a class="btn btn-primary {{#if this.hasNextPage}}enabled{{else}}disabled{{/if}}" href={{this.nextLink}} role="button">Siguiente</a>
+    <a class="btn btn-primary {{#if this.hasPrevPage}}enabled{{else}}disabled{{/if}}" href={{this.prevLink}}
+        role="button">Anterior</a>
+    <div style="width: 100px;text-align: center;">Pagina: {{this.page}}</div>
+    </DUV>
+    <a class="btn btn-primary {{#if this.hasNextPage}}enabled{{else}}disabled{{/if}}" href={{this.nextLink}}
+        role="button">Siguiente</a>
 </container>
