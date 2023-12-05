@@ -2,6 +2,8 @@ import { Router }  from 'express';
 
 const router = Router();
 
+
+
 router.use('/login', async (req, res) => {
     res.render('login', {title: 'Login'});
 });
@@ -29,5 +31,9 @@ router.get('/logout', (req, res) => {
       res.redirect('/login');
     });
   })
+
+  router.use('/', async (req, res) => {
+    res.render('login', {title: 'Login'});
+  });
 
 export default router;
