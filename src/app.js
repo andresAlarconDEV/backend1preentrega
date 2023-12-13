@@ -4,9 +4,11 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
+import passport from 'passport';
 
 import { __dirname } from './utils2.js';
 import { URI } from './db/mongodb.js';
+import { init as initPassport } from './config/passport.config.js';
 
 import productRouter from './routers/api/products.router.js';
 import cartRouter from './routers/api/carts.router.js';
@@ -41,6 +43,10 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
+
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 app.use('/api', productRouter, cartRouter, sessionsRouter);

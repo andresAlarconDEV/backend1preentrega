@@ -6,10 +6,14 @@
         BikeShop
     </div>
     {{#if failed}}
-    <div><p style="color: rgb(129, 44, 44)">{{message}}</p></div>
+    <div>
+        <p style="color: rgb(129, 44, 44)">{{message}}</p>
+    </div>
     {{/if}}
     {{#if createOK}}
-    <div><p style="color: green">{{message}}</p></div>
+    <div>
+        <p style="color: green">{{message}}</p>
+    </div>
     {{/if}}
     <form class="p-3 mt-3" action="/api/sessions/login" method="post">
         <div class="form-field d-flex align-items-center">
@@ -22,6 +26,9 @@
         </div>
         <button class="btn mt-3" type="submit">Ingresar</button>
     </form>
+    <div class="text-center fs-6">
+        <a href="/api/sessions/github" >Iniciar sesión con GitHub</a>
+    </div>
     <div class="text-center fs-6">
         <a href="/register">Registrarse</a>
     </div>

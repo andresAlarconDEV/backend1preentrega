@@ -1,4 +1,5 @@
 import userModel from '../models/user.model.js';
+import { createHash, isValidPassword } from '../../utils2.js'
 
 const localAdmin = {
     email: 'adminCoder@coder.com',
@@ -20,7 +21,8 @@ export default class UsersManager {
             if (!user) {
                 throw new Error('Correo o contraseña no son validos.');
             };
-            if (user.password !== password) {
+            const isNotValidPass = isValidPassword(password, user)
+            if (!isNotValidPass) {
                 throw new Error('Correo o contraseña no son validos.');
             };
             const {
@@ -52,7 +54,7 @@ export default class UsersManager {
             email,
             age,
             role,
-            password
+            password: createHash(password)
         });
 
         return user;

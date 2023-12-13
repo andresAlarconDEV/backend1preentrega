@@ -1,5 +1,6 @@
 import path from 'path';
 import url from 'url';
+import bcrypt from 'bcrypt';
 
 const __filename = url.fileURLToPath(import.meta.url);
 
@@ -34,3 +35,8 @@ export const buildResponseProductsInCart = (data) => {
 };
 
 export const __dirname = path.dirname(__filename);
+
+
+export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
+export const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password); 

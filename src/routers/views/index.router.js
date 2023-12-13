@@ -13,17 +13,17 @@ router.use('/register', async (req, res) => {
 });
 
 router.use('/profile', async (req, res) => {
-    if (!req.session.user) {
+    if (!req.user) {
         // return res.status(401).json({message: 'No esta autenticado'})
         res.redirect('/login');
-    }
+    }else {
     // console.log(req.session.user);
-    res.render('profile', req.session.user);
-    
+    res.render('profile', req.user.toJSON());
+    }
 });
 
 router.get('/logout', (req, res) => {
-    req.session.destroy((error) => {
+    req.logout((error) => {
       if (error) {
         // return res.render('login', { title: 'Hello People 🖐️', messageError: error.message });
         return res.render('login', {message: error, failed: true });
