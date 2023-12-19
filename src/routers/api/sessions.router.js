@@ -53,8 +53,13 @@ router.post('/session/logout', (req, res) => {
     scope: ['user: email']
   }));
 
-  router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res)=> {
+  router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+    console.log('req.user', req.user);
     res.redirect('/products');
   });
+  // router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res)=> {
+  //   console.log('req.user', req.user);
+  //   res.redirect('/products');
+  // });
 
 export default router;

@@ -13,7 +13,7 @@ const localAdmin = {
 const githubOptions = {
     clientID: 'Iv1.24db8bfee803feb8',
     clientSecret: '9c2eca1de88fe13392872990d18a270559aeb4cd',
-    callbackURL: 'http://localhost:8080/api/sessions/github/callback'
+    callbackURL: 'http://localhost:8080/api/sessions/github/callback',
 };
 
 export const init = () => {
@@ -66,7 +66,7 @@ export const init = () => {
     }
     )); 
 
-    passport.use('github', new GithubStrategy(githubOptions, async (accesstoken, refresjToken, profile, done) => {
+    passport.use('github', new GithubStrategy(githubOptions, async (accesstoken, refreshToken, profile, done) => {
         const email = profile._json.email;
         let user = await userModel.findOne({ email });
         if (user) {
@@ -77,15 +77,16 @@ export const init = () => {
             last_name: '',
             email,
             password: '',
-            age: ''
+            age: '18'
         }
         const newUser = await userModel.create(user);
-        done(null)
+        done(null, newUser);
     }));
 
     passport.serializeUser((user, done)=> {
         done(null, user._id)
     });
+
     passport.deserializeUser( async(uid, done)=> {
         const user = await userModel.findById(uid);
         done (null, user);
