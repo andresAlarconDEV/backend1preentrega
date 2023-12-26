@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const cartItemSchema = new mongoose.Schema({
-    cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' }},
+    idCart: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' }},
     { _id: false });
 
 const UserSchema = new mongoose.Schema({
@@ -10,13 +10,13 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, index: true, unique: true },
     age: { type: String, required: false },
     role: { type: String, default: 'user' },
-    cart: { type: cartItemSchema, default: ''},
+    carts: { type:[cartItemSchema], default: []},
     // cart: {  type: String, required: false},
     password: { type: String }
 }, { timestamps: true });
 
 UserSchema.pre('find', function() {
-    this.populate('cart');
+    this.populate('carts.idCart');
 });
 
 
