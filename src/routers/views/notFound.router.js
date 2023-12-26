@@ -2,7 +2,7 @@ import { Router }  from 'express';
 
 const router = Router();
 
-router.use('/', async (req, res) => {
+router.use('*', async (req, res) => {
     res.render('notFound', {title: 'Pagina no encontrada '});
 });
 

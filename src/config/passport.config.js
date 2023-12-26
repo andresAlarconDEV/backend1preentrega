@@ -27,7 +27,8 @@ export const init = () => {
             body: {first_name,
             last_name,
             age,
-            role},} = req;
+            role,
+            cart},} = req;
         if (!first_name || !last_name || !email || !password) {
             return done(new Error('Todos los campos son requeridos.'));
             // throw new Error('Todos los campos son obligatorios.');
@@ -39,7 +40,8 @@ export const init = () => {
             email,
             age,
             role,
-            password: createHash(password)
+            password: createHash(password),
+            cart,
         });
         done(null, user)
     }));
@@ -61,6 +63,7 @@ export const init = () => {
                 // throw new Error('Correo o contraseña no son validos.');
             };
             // const isAdmin = user.role === 'admin' ? true : false;
+            console.log('user: ',user);
             done (null, user);
         };
     }
@@ -77,7 +80,8 @@ export const init = () => {
             last_name: '',
             email,
             password: '',
-            age: '18'
+            age: '18',
+            cart: ''
         }
         const newUser = await userModel.create(user);
         done(null, newUser);

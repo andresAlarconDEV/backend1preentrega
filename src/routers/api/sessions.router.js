@@ -4,6 +4,10 @@ import passport from 'passport';
 
 const router = Router();
 
+router.get('/sessions/get', async (req, res) => {
+  res.status(200).json(await UsersManager.get());
+});
+
 router.post('/sessions/login',  passport.authenticate('login', { failureRedirect: '/login' }), async(req, res) => {
     // const { body } = req;
     // try {
@@ -57,9 +61,6 @@ router.post('/session/logout', (req, res) => {
     console.log('req.user', req.user);
     res.redirect('/products');
   });
-  // router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res)=> {
-  //   console.log('req.user', req.user);
-  //   res.redirect('/products');
-  // });
+
 
 export default router;

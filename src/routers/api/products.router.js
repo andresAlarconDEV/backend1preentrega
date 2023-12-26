@@ -10,7 +10,7 @@ router.get('/products', async (req, res) => {
 });
 
 
-router.get('/products/:pid', async (req, res) => {
+router.get('/products/:pid([a-zA-Z0-9]+)', async (req, res) => {
     const { pid } = req.params;
     try {
         res.status(200).json(await ProductsManager.getProductById(pid))

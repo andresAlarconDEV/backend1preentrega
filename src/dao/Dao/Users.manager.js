@@ -9,6 +9,10 @@ const localAdmin = {
 
 export default class UsersManager {
 
+    static get() {
+        return userModel.find();
+    }
+
     static async loginUser(body) {
         const { email, password } = body;
         if (!email || !password) {
