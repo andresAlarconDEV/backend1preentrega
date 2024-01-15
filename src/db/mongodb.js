@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import config from '../config/config.js';
 
-export const URI = 'mongodb+srv://developer:wtBxuyWSvYBsThkW@cluster0.zs9frjx.mongodb.net/ecommerce';
+export const URI = config.mongodbUri;
 
 export const init = async () => {
     try {

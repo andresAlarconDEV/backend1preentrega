@@ -1,10 +1,11 @@
 import path from 'path';
+import config from './config/config.js';
 import url from 'url';
 import bcrypt from 'bcrypt';
 
 const __filename = url.fileURLToPath(import.meta.url);
 
-const URL_BASE = 'http://localhost:8080/';
+const URL_BASE = config.urlBase;
 
 export const buildResponsePaginated = (data) => {
     const { docs, totalPages, prevPage, nextPage, page, hasPrevPage, hasNextPage, limit, options, criteria, endpoint } = data;

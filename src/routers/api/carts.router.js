@@ -1,16 +1,22 @@
 import { Router } from 'express';
-import CartsManager from '../../dao/Dao/carts.manager.js';
+import CartsController from '../../controllers/carts.controller.js'
+import CartsManager from '../../dao/Dao/Carts.manager.js';
 
 const router = Router();
 
 router.get('/carts', async (req, res) => {
-        res.status(200).json(await CartsManager.get());
+    try {
+        res.status(200).json(await CartsController.getAll());
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
 });
 
 router.get('/carts/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
-        res.status(200).json(await CartsManager.getCartById(cid))
+        res.status(200).json(await CartsController.getCartById(cid))
     }
     catch (error) {
         res.status(404).send(error.message);
@@ -19,7 +25,7 @@ router.get('/carts/:cid', async (req, res) => {
 
 router.post('/carts', async (req, res) => {
     try {
-        res.status(201).json(await CartsManager.addCart());
+        res.status(201).json(await CartsController.addCart());
     }
     catch (error) {
         res.status(400).send(error.message);
@@ -29,7 +35,7 @@ router.post('/carts', async (req, res) => {
 router.post('/carts/:cid/product/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     try {
-        res.status(201).json(await CartsManager.addProductInCart(cid, pid));
+        res.status(201).json(await CartsController.addProductInCart(cid, pid));
     }
     catch (error) {
         res.status(404).send(error.message);
@@ -39,7 +45,7 @@ router.post('/carts/:cid/product/:pid', async (req, res) => {
 router.delete('/carts/:cid/product/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     try {
-        res.status(201).json(await CartsManager.deleteProductInCart(cid, pid));
+        res.status(201).json(await CartsController.deleteProductInCart(cid, pid));
     }
     catch (error) {
         res.status(404).send(error.message);
@@ -50,7 +56,7 @@ router.put('/carts/:cid', async (req, res) => {
     const { cid } = req.params;
     const { body } = req;
     try {
-        res.status(201).json(await CartsManager.putCart( cid, body ));
+        res.status(201).json(await CartsController.updateProductCart( cid, body ));
     }
     catch (error) {
         res.status(404).send(error.message);
@@ -61,7 +67,7 @@ router.put('/carts/:cid/product/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     const { body } = req;
     try {
-        res.status(201).json(await CartsManager.putProductInCart( cid, pid, body ));
+        res.status(201).json(await CartsController.updateQuantityProductInCart( cid, pid, body ));
     }
     catch (error) {
         res.status(404).send(error.message);
@@ -71,12 +77,12 @@ router.put('/carts/:cid/product/:pid', async (req, res) => {
 router.delete('/carts/:cid', async (req, res)=> {
     const { cid } = req.params;
     try {
-        res.status(201).json(await CartsManager.deleteInCart( cid ));
+        res.status(201).json(await CartsController.deleteAllProductCart( cid ));
     }
     catch (error) {
         res.status(404).send(error.message);
     }
-})
+});
 
 
 export default router;

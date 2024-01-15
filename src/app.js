@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
+import config from "./config/config.js"
 
 import { __dirname } from './utils2.js';
 import { URI } from './db/mongodb.js';
@@ -22,7 +23,7 @@ import sessionsRouter from './routers/api/sessions.router.js';
 import indexRouter from './routers/views/index.router.js';
 
 const app = express();
-const SESSION_SECRET = '7h1*0AzY%Dr!F!7sa';
+const SESSION_SECRET = config.sessionSecret;
 app.use(cookieParser(SESSION_SECRET));
 app.use(sessions({
     store: MongoStore.create({

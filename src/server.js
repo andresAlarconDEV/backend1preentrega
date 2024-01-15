@@ -1,11 +1,12 @@
 import http from "http";
+import config from "./config/config.js"
 import app from "./app.js";
 import { initSocket } from "./socket.js";
 const server = http.createServer(app);
 import { init } from './db/mongodb.js';
 
 
-const PORT = 8080;
+const PORT = config.port;
 
 await init();
 

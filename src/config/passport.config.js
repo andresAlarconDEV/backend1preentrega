@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GithubStrategy } from "passport-github2";
+import config from "./config.js";
 import userModel from "../dao/models/user.model.js";
 import { createHash, isValidPassword } from '../utils2.js';
 
@@ -11,10 +12,9 @@ const localAdmin = {
 };
 
 const githubOptions = {
-    clientID: 'Iv1.24db8bfee803feb8',
-    clientSecret: '9c2eca1de88fe13392872990d18a270559aeb4cd',
-    callbackURL: 'http://localhost:8080/api/sessions/github/callback',
-};
+    clientID: config.githubClientID,
+    clientSecret: config.githubClientSecret,
+    callbackURL: config.githubCallbackURL};
 
 export const init = () => {
     const registerOpts = {

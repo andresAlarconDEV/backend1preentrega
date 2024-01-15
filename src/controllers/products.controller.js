@@ -1,9 +1,10 @@
-import ProductModel from '../models/product.model.js';
-import { buildResponsePaginated } from '../../utils2.js';
+import ProductsService from "../services/product.service.js";
+import { buildResponsePaginated } from '../utils2.js';
 
-export default class ProductsManager {
-    static async get(query, endpoint) {
-                const { limit=5, page=1, sort, search } = query;
+export default class ProductsController {
+
+    static async getAll(query, endpoint) {
+        const { limit=4, page=1, sort, search } = query;
         // sort por price, ASC/DESC
         // search por category
         const criteria = {};
@@ -14,39 +15,39 @@ export default class ProductsManager {
         if (search){
             criteria.category = search;
         }
-        const result = await ProductModel.paginate(criteria, options);
+        const result = await ProductsService.getAll(criteria, options);
         const responsePaginate = buildResponsePaginated({...result, options, criteria , endpoint });
         return responsePaginate;
     }
 
     static getProductById(pid) {
-        let product = ProductModel.findById(pid);
-        return product;
+        return ProductsService.getProductById(pid);
+        
     };
 
     static async addProduct(body) {
         const {title, description, price, code, stock, status, category, thumbnail} = body;
         // let codeExist = this.products.find(e => e.code === code);
-        const codeExist = await ProductModel.findOne({'code': code });
+        const codeExist = await ProductsService.getProductByCode(code);
         if (!codeExist) {
-            if (title && description && price && code && stock && status && category) {
+            if (title && description && price && code && stock && category &&  status) {
                 const newProduct = {
                     ...body,
                     status: 1
                 }
-                const productCreate = await ProductModel.create(newProduct);
+                const productCreate = await ProductsService.addProduct(newProduct);
                 return productCreate;
             } else {
-                throw new Error('Todos los campos son obligatorios.');
+                throw new Error('Todos los campos son obligatorios');
             }
         } else {
             throw new Error('el producto con codigo ' + code + ' ya se encuentra creado');
         }
+        
     }
 
-
     static async updateProduct(pid, objectUpdate) {
-        let product = await ProductModel.findById(pid);
+        let product = await ProductsService.getProductById(pid);
         if (product) {
             const keysUpdate = Object.keys(objectUpdate);
             keysUpdate.map((e) => {
@@ -56,8 +57,8 @@ export default class ProductsManager {
                     throw new Error('No existe el campo a actualizar "'+ e + '"')
                 }
             });
-            await ProductModel.updateOne({ _id: pid }, { $set: objectUpdate });
-            product = await ProductModel.findById(pid);
+            await ProductsService.updateProduct(pid, objectUpdate);
+            product = await ProductsService.getProductById(pid);
             return product;
         } else {
             throw new Error('No existe el producto con el ID '+ id);
@@ -65,8 +66,8 @@ export default class ProductsManager {
     }
 
     static async deleteProduct(pid) {
-        await ProductModel.findById(pid);
-        await ProductModel.deleteOne({ _id: pid });
+        await ProductsService.getProductById(pid);
+        await ProductsService.deleteProduct(pid);
     }
 
 }
