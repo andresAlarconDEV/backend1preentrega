@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import UsersManager from '../../dao/Dao/Users.manager.js';
+import UsersController from '../../controllers/users.controller.js';
 import passport from 'passport';
 
 const router = Router();
 
 router.get('/sessions/get', async (req, res) => {
-  res.status(200).json(await UsersManager.get());
+  res.status(200).json(await UsersController.getAll());
 });
 
 router.post('/sessions/login',  passport.authenticate('login', { failureRedirect: '/login' }), async(req, res) => {

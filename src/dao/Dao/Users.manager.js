@@ -21,7 +21,7 @@ export default class UsersManager {
         if (localAdmin.email === email && localAdmin.password === password) {
             return { email, role: 'admin', isAdmin: true };
         } else {
-            const user = await userModel.findOne({ email });
+            const user = await userModel.findOne({ email }); //aqui
             if (!user) {
                 throw new Error('Correo o contraseña no son validos.');
             };
@@ -59,7 +59,7 @@ export default class UsersManager {
             age,
             role,
             password: createHash(password)
-        });
+        });  //aqui
 
         return user;
     }
