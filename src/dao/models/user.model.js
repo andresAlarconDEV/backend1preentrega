@@ -19,7 +19,4 @@ UserSchema.pre('find', function() {
     this.populate('carts.idCart');
 });
 
-
-
-
 export default mongoose.model('User', UserSchema);

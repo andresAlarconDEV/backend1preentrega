@@ -10,7 +10,13 @@ export default {
     githubClientID: process.env.GITHUB_CLIENTID || 'testGitHub',
     githubClientSecret: process.env.GITHUB_CLIENTSECRET || 'testGitHub',
     githubCallbackURL: process.env.URLBASE+process.env.PORT+process.env.GITGUB_CALLBACKURL || 'testGitHub',
-    urlBase: process.env.URLBASE+process.env.PORT+'/'
+    urlBase: process.env.URLBASE+process.env.PORT+'/',
+    persistence: process.env.PERSISTENCE || 'mongoDB',
+    email: {emailUser: process.env.EMAIL_USER,
+    emailPassword: process.env.EMAIL_PASSWORD,
+    emailService: process.env.EMAIL_SERVICE,
+    emailPort: process.env.EMAIL_PORT},
+    jwtSecret: process.env.JWT_SECRET 
 }
 
 

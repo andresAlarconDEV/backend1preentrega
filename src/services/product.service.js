@@ -1,28 +1,30 @@
-import productDao from "../dao/product.dao.js"
+// import  { productDao } from "../dao/factory.js"
+// import productDao from "../dao/mongoDB/product.mongodb.dao.js";
+import { productsRepository } from "../repositories/index.js";
 
 export default class ProductsService {
 static getAll (criteria, options){
-    return productDao.getAll(criteria, options);
+    return productsRepository.getAll(criteria, options);
 }
 
 static getProductById (pid){
-    return productDao.getProductById(pid);
+    return productsRepository.getProductById(pid);
 }
 
 static getProductByCode (pcode){
-    return productDao.getProductByCode(pcode);
+    return productsRepository.getProductByCode(pcode);
 }
 
 static addProduct (newProduct){
-    return productDao.addProduct(newProduct);
+    return productsRepository.addProduct(newProduct);
 }
 
 static updateProduct (pid, objectUpdate){
-    return productDao.updateProduct(pid, objectUpdate);
+    return productsRepository.updateProduct(pid, objectUpdate);
 }
 
 static deleteProduct (pid){
-    return productDao.deleteProduct(pid);
+    return productsRepository.deleteProduct(pid);
 }
 
 

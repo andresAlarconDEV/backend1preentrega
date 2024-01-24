@@ -2,10 +2,13 @@ import path from 'path';
 import config from './config/config.js';
 import url from 'url';
 import bcrypt from 'bcrypt';
+import JWT from 'jsonwebtoken';
+import passport from 'passport';
 
 const __filename = url.fileURLToPath(import.meta.url);
 
 const URL_BASE = config.urlBase;
+const JWT_SECRET = config.jwtSecret;
 
 export const buildResponsePaginated = (data) => {
     const { docs, totalPages, prevPage, nextPage, page, hasPrevPage, hasNextPage, limit, options, criteria, endpoint } = data;
@@ -42,22 +45,27 @@ export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSy
 
 export const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password);
 
-// export const generateToken = (user) => {
-//     const {id, first_name, email } = user;
-//     const payload = { id, first_name, email };
-//     return JWT.sign(payload, JWT_SECRETE, { expiresIn: '5m' });
-// }
+export const generateToken = (user) => {
+    const payload = {
+        id: user._id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        role: user.role,
+      };
+    return JWT.sign(payload, JWT_SECRET, { expiresIn: '1m' });
+}
 
-// export const validateToken = (token) => {
-//     return new Promise((resolve, reject) => {
-//         JWT.verify(token, JWT_SECRETE, (error, payload) => {
-//             if (error){
-//                 return reject(error)
-//             }
-//             resolve(payload);
-//         })
-//     })
-// }
+export const validateToken = (token) => {
+    return new Promise((resolve, reject) => {
+        JWT.verify(token, JWT_SECRET, (error, payload) => {
+            if (error){
+                return reject(error)
+            }
+            resolve(payload);
+        })
+    })
+}
 
 export const authMiddleware = (strategy) => (req, res, next) => {
     passport.authenticate(strategy, function (error, payload, info) {

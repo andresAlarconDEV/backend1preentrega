@@ -2,9 +2,10 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import sessions from 'express-session';
+// import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
+import cors from 'cors';
 import config from "./config/config.js"
 
 import { __dirname } from './utils2.js';
@@ -21,22 +22,32 @@ import cartsRouter from './routers/views/carts.router.js';
 import notFoundRouter from './routers/views/notFound.router.js';
 import sessionsRouter from './routers/api/sessions.router.js';
 import indexRouter from './routers/views/index.router.js';
+import notificationRouter from './routers/api/notifications.router.js';
 
 const app = express();
-const SESSION_SECRET = config.sessionSecret;
-app.use(cookieParser(SESSION_SECRET));
-app.use(sessions({
-    store: MongoStore.create({
-        mongoUrl: URI,
-        mongoOptions: {},
-        ttl: 200,
+// const SESSION_SECRET = config.sessionSecret;
 
-    }),
-    secret: SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true
-}))
+const corsOptions = {
+    origin: 'http://localhost:5500',
+    methods: ['GET','POST','PUT','DELETE']
+}
 
+app.use(cookieParser());
+// app.use(sessions({
+//     store: MongoStore.create({
+//         mongoUrl: URI,
+//         mongoOptions: {},
+//         ttl: 200,
+
+//     }),
+//     secret: SESSION_SECRET,
+//     resave: true,
+//     saveUninitialized: true
+// }))
+
+
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
@@ -47,7 +58,7 @@ app.set('view engine', 'handlebars');
 
 initPassport();
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 
 app.use('/api', productRouter, cartRouter, sessionsRouter);
@@ -56,6 +67,7 @@ app.use('/chat', messageRouter);
 app.use('/products', productsRouter);
 app.use('/realtimeproducts', realTimeProductsRouter);
 app.use('/home', homeRouter);
+app.use('/notification', notificationRouter);
 app.use('/', indexRouter); 
 app.use('/*', notFoundRouter);
 

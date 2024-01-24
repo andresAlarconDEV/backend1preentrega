@@ -16,14 +16,20 @@ export default class UsersController {
     static getByEmail(email) {
         return UsersService.getByEmail(email);
     }
+    
+    static getById(email) {
+        return UsersService.getById(email);
+    }
 
-    static async postUser(req, email, password) {
+    static async postUser(req) {
         const {
             body: { first_name,
                 last_name,
                 age,
                 role,
-                cart }, } = req;
+                cart,
+                email,
+                password }, } = req;
         if (!first_name || !last_name || !email || !password) {
             return done(new Error('Todos los campos son requeridos.'));
         }
@@ -40,7 +46,8 @@ export default class UsersController {
         return createUser;
     }
 
-    static async getLoginUser(email, password) {
+    static async getLoginUser(body) {
+        const { email, password} = body;
         if (localAdmin.email === email && localAdmin.password === password) {
             return { email, role: 'admin', isAdmin: true };
         } else {
