@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema({
     age: { type: String, required: false },
     role: { type: String, default: 'user' },
     carts: { type:[cartItemSchema], default: []},
-    // cart: {  type: String, required: false},
     password: { type: String }
 }, { timestamps: true });
 

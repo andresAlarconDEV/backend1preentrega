@@ -2,7 +2,7 @@ import { Router } from 'express';
 // import ProductsManager from '../../dao/Dao/Products.manager.js';
 import ProductsController from '../../controllers/products.controller.js'
 const router = Router();
-import { authMiddleware } from '../../utils2.js';
+import { authMiddleware, authRolesMiddleware } from '../../utils2.js';
 
 router.get('/products', authMiddleware("jwt"), async (req, res) => {
     const endpoint = 'products/api/'; 
@@ -26,7 +26,7 @@ router.get('/products/:pid([a-zA-Z0-9]+)', authMiddleware("jwt"), async (req, re
     }
 });
 
-router.post('/products', authMiddleware("jwt"), async (req, res) => {
+router.post('/products', authMiddleware("jwt"), authRolesMiddleware('admin'), async (req, res) => {
     const { body } = req;
     // const img = req.file.path;
     try {
@@ -37,7 +37,7 @@ router.post('/products', authMiddleware("jwt"), async (req, res) => {
     }
 });
 
-router.put('/products/:pid', authMiddleware("jwt"), async (req, res) => {
+router.put('/products/:pid', authMiddleware("jwt"), authRolesMiddleware('admin'), async (req, res) => {
     const { pid } = req.params;
     const { body } = req;
     try {
@@ -48,7 +48,7 @@ router.put('/products/:pid', authMiddleware("jwt"), async (req, res) => {
     }
 });
 
-router.delete('/products/:pid', authMiddleware("jwt"), async (req, res) => {
+router.delete('/products/:pid', authMiddleware("jwt"), authRolesMiddleware('admin'), async (req, res) => {
     const { pid } = req.params;
     try {
         res.status(201).json(await ProductsController.deleteProduct(pid));

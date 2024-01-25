@@ -14,7 +14,6 @@ router.post('/sessions/login', async (req, res, next) => {
   try {
     const user = await UsersController.getLoginUser(req.body);
     const token = generateToken(user);
-    console.log('aqui router', token);
     res.cookie('token', token, {
       maxAge: 1000 * 60,
       httpOnly: true,

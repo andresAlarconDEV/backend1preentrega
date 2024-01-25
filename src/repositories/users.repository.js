@@ -19,4 +19,8 @@ export default class UserRepository {
     postUser(user) {
         return this.dao.postUser(user);
     }
+
+    postCartUser (uid, cid){
+        return this.dao.postCartUser(uid, cid);
+    }
 }

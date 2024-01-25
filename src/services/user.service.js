@@ -19,4 +19,8 @@ export default class UsersService {
     static postUser (user){
         return usersRepository.postUser(user);
     }
+
+    static postCartUser (uid, cid){
+        return usersRepository.postCartUser(uid, cid);
+    }
 }

@@ -35,7 +35,6 @@ export const initSocket = (httpserver) => {
         });
 
         socketClient.on('deleteProduct', async(value) => {
-            console.log(value);
             await products.deleteProduct(value);
             const listProducts = await products.get();
             io.emit('products', listProducts);

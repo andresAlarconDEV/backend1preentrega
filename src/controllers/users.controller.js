@@ -53,13 +53,13 @@ export default class UsersController {
         } else {
             const user = await UsersService.getByEmail(email);
             if (!user) {
-                return (new Error('Correo o contraseña no son validos.'));
-                // throw new Error('Correo o contraseña no son validos.');
+                // return (new Error('Correo o contraseña no son validos.'));
+                throw new Error('Correo o contraseña no son validos.');
             };
             const isNotValidPass = isValidPassword(password, user)
             if (!isNotValidPass) {
-                return (new Error('Correo o contraseña no son validos.'));
-                // throw new Error('Correo o contraseña no son validos.');
+                // return (new Error('Correo o contraseña no son validos.'));
+                throw new Error('Correo o contraseña no son validos.');
             };
             return user;
         }

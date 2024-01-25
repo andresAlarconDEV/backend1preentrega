@@ -52,6 +52,7 @@ export const generateToken = (user) => {
         last_name: user.last_name,
         email: user.email,
         role: user.role,
+        carts: user.carts
       };
     return JWT.sign(payload, JWT_SECRET, { expiresIn: '1m' });
 }

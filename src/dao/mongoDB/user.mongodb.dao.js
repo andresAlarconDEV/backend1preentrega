@@ -17,4 +17,9 @@ export default class UserDaoMongoDB {
     static postUser (user){
         return UserModel.create(user);
     }
+
+    static postCartUser (uid, cid){
+        console.log("cid", JSON.stringify(cid));
+        return UserModel.updateOne({_id: uid}, { $push: {carts: {"idCart": cid} }});
+    }
 }

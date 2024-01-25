@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import CartsController from '../../controllers/carts.controller.js'
 import CartsManager from '../../dao/Dao/Carts.manager.js';
-import { authMiddleware } from '../../utils2.js';
+import { authMiddleware, authRolesMiddleware } from '../../utils2.js';
 
 const router = Router();
 
@@ -24,16 +24,17 @@ router.get('/carts/:cid', authMiddleware("jwt"), async (req, res) => {
     }
 });
 
-router.post('/carts', authMiddleware("jwt"), async (req, res) => {
+
+router.post('/carts', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
     try {
-        res.status(201).json(await CartsController.addCart());
+        res.status(201).json(await CartsController.addCart(req));
     }
     catch (error) {
         res.status(400).send(error.message);
     }
 });
 
-router.post('/carts/:cid/product/:pid', authMiddleware("jwt"), async (req, res) => {
+router.post('/carts/:cid/product/:pid',  authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
     const { cid, pid } = req.params;
     try {
         res.status(201).json(await CartsController.addProductInCart(cid, pid));
@@ -53,7 +54,7 @@ router.delete('/carts/:cid/product/:pid', authMiddleware("jwt"), async (req, res
     }
 });
 
-router.put('/carts/:cid',  authMiddleware("jwt"), async (req, res) => {
+router.put('/carts/:cid',  authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
     const { cid } = req.params;
     const { body } = req;
     try {
@@ -64,7 +65,7 @@ router.put('/carts/:cid',  authMiddleware("jwt"), async (req, res) => {
     }
 });
 
-router.put('/carts/:cid/product/:pid', authMiddleware("jwt"), async (req, res) => {
+router.put('/carts/:cid/product/:pid', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
     const { cid, pid } = req.params;
     const { body } = req;
     try {
@@ -75,10 +76,19 @@ router.put('/carts/:cid/product/:pid', authMiddleware("jwt"), async (req, res) =
     }
 });
 
-router.delete('/carts/:cid', authMiddleware("jwt"), async (req, res)=> {
+router.delete('/carts/:cid', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res)=> {
     const { cid } = req.params;
     try {
         res.status(201).json(await CartsController.deleteAllProductCart( cid ));
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+});
+
+router.post('/carts/:cid/purchase', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
+    try {
+        res.status(200).json(await CartsController.postPurchase(req))
     }
     catch (error) {
         res.status(404).send(error.message);

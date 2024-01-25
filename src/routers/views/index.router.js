@@ -17,7 +17,6 @@ router.use('/profile', async (req, res) => {
         // return res.status(401).json({message: 'No esta autenticado'})
         res.redirect('/login');
     }else {
-    // console.log(req.session.user);
     res.render('profile', req.user.toJSON());
     }
 });

@@ -29,7 +29,6 @@
 
 
         socket.on('products', (listProducts) => {
-            // console.log('products', listProducts);
             const bodyTableProducts = document.getElementById('bodyTableProducts');
             bodyTableProducts.innerHTML = '';
             listProducts.map((e) => {

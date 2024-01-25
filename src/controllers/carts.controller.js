@@ -1,6 +1,8 @@
 import CartsService from "../services/cart.service.js";
 import ProductsService from "../services/product.service.js";
 import { buildResponsePaginated } from '../utils2.js';
+import UsersService from "../services/user.service.js";
+// import
 
 export default class CartsController {
 
@@ -12,10 +14,11 @@ export default class CartsController {
         return CartsService.getCartById(cid);
     }
 
-    static async addCart() {
+    static async addCart(req) {
         const newCart = { 'products': [] }
-        const productCreate = await CartsService.addCart(newCart);
-        return productCreate;
+        const cartCreate = await CartsService.addCart(newCart);
+        await UsersService.postCartUser(req.user.id,cartCreate._id);
+        return cartCreate;
     }
 
     static async addProductInCart(cid, pid){
@@ -84,6 +87,30 @@ export default class CartsController {
         } else {
             throw new Error('No existe el carrito con el ID ' + cid);
         }
+    }
+
+    static async postPurchase(req) {
+        const { cid } = req.params;
+        const email = req.user.email;
+        const cartsUser = req.user.carts;
+        const cartFind = cartsUser.find((e) => e.idCart===cid);
+        if (cartFind) {
+            const cart = await CartsService.getCartById(cid);
+            // const products = await ProductsService.getAll();
+            // console.log(cart.products);
+            cart.products.map(async (e)=> {
+                let product = await ProductsService.getProductById(e.idProduct);
+                if (e.quantity<=product.stock){
+                    console.log("tiene Stock");
+                }
+                else {
+                    console.log("no tiene stock");
+                }
+            })
+        } else {
+            throw new Error('ID de Cart no es encontrado a su usuario');
+        }
+        // return CartsService.postPurchase(cid, email);
     }
 
 }
