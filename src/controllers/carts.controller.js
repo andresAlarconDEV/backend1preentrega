@@ -2,6 +2,7 @@ import CartsService from "../services/cart.service.js";
 import ProductsService from "../services/product.service.js";
 import { buildResponsePaginated } from '../utils2.js';
 import UsersService from "../services/user.service.js";
+import TicketsController from "./tickets.controller.js";
 // import
 
 export default class CartsController {
@@ -93,20 +94,47 @@ export default class CartsController {
         const { cid } = req.params;
         const email = req.user.email;
         const cartsUser = req.user.carts;
+        let productNoStock = [];
+        let productStock = [];
+        let responseTicket = {};
         const cartFind = cartsUser.find((e) => e.idCart===cid);
         if (cartFind) {
             const cart = await CartsService.getCartById(cid);
-            // const products = await ProductsService.getAll();
-            // console.log(cart.products);
-            cart.products.map(async (e)=> {
+            if(cart.products.length >= 1){
+            for (const e of cart.products) {
                 let product = await ProductsService.getProductById(e.idProduct);
                 if (e.quantity<=product.stock){
-                    console.log("tiene Stock");
+                    product.stock = product.stock - e.quantity;
+                    await ProductsService.updateProduct(product._id, {"stock": product.stock});
+                    let productQuantity = {id: e.idProduct, quantity: e.quantity, price: product.price};
+                    productStock.push(productQuantity);
                 }
                 else {
-                    console.log("no tiene stock");
+                    productNoStock.push(e);
                 }
-            })
+            };
+
+            if (productNoStock.length >= 1) {
+                await CartsController.updateProductCart(cid, productNoStock);
+                responseTicket.productosSinStock = productNoStock;
+            } else {
+                await CartsController.deleteAllProductCart(cid);
+            }
+            
+            if(productStock.length >=1){
+                const amount = productStock.reduce((total, producto) =>
+                total + (producto.price * producto.quantity),0);
+                const dataTicket = {
+                    amount: amount,
+                    purchaser: email
+                };
+                const ticketCreate = await TicketsController.postTicket(dataTicket);
+                responseTicket.ticketInfo = ticketCreate;
+            }
+            return responseTicket}
+            else {
+                throw new Error('No hay productos en el carrito');
+            }
         } else {
             throw new Error('ID de Cart no es encontrado a su usuario');
         }

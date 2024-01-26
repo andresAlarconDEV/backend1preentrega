@@ -23,4 +23,5 @@ export default class UserRepository {
     postCartUser (uid, cid){
         return this.dao.postCartUser(uid, cid);
     }
+
 }

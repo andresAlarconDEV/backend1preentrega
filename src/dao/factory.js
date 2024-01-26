@@ -2,7 +2,7 @@ import config from '../config/config.js';
 
 // export let productDao;
 // export let cartDao;
-export let userDao, productDao, cartDao;
+export let userDao, productDao, cartDao, ticketDao;
 
 switch (config.persistence) {
   case 'mongoDB':
@@ -12,5 +12,7 @@ switch (config.persistence) {
     productDao = ProductDaoMongoDB;
     const {default:CartDaoMongoDB} = await import('./mongoDB/cart.mongodb.dao.js');
     cartDao = CartDaoMongoDB;
+    const {default:TicketDaoMongoDB} = await import('./mongoDB/ticket.mongodb.dao.js');
+    ticketDao = TicketDaoMongoDB;
     break;
 }
