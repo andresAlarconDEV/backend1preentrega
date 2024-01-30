@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import EmailService from '../../services/email.service.js';
+import TwilioService from '../../services/twilio.service.js';
 import path from 'path';
 import { __dirname } from '../../utils2.js';
 
@@ -19,6 +20,12 @@ const result = await emailService.sendEmail(
 );
 res.status(200).json(result);
 });
+
+router.get('/sendSMS', async (req, res) => {
+    const twilioService = TwilioService.getInstance();
+    const response = await twilioService.sendSMS('+573006351170', `Su codigo de verificación es: ${Date.now()}`);
+    res.status(200).json(response);
+  });
 
 
 export default router;

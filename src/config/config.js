@@ -16,7 +16,12 @@ export default {
     emailPassword: process.env.EMAIL_PASSWORD,
     emailService: process.env.EMAIL_SERVICE,
     emailPort: process.env.EMAIL_PORT},
-    jwtSecret: process.env.JWT_SECRET 
+    jwtSecret: process.env.JWT_SECRET,
+    twilio: {
+        accountSid: process.env.TWILIO_ACCOUNT_SID,
+        authToken: process.env.TWILIO_AUTH_TOKEN,
+        phoneNumber: process.env.TWILIO_PHONE_NUMBER,
+      },
 }
 
 
