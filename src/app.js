@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'express-compression';
 import handlebars from 'express-handlebars';
 import path from 'path';
 import cookieParser from 'cookie-parser';
@@ -11,6 +12,7 @@ import config from "./config/config.js"
 import { __dirname } from './utils2.js';
 import { URI } from './db/mongodb.js';
 import { init as initPassport } from './config/passport.config.js';
+import { errorHandlerMiddleware } from './middlewares/error-handler.middleware.js';
 
 import productRouter from './routers/api/products.router.js';
 import cartRouter from './routers/api/carts.router.js';
@@ -23,6 +25,7 @@ import notFoundRouter from './routers/views/notFound.router.js';
 import sessionsRouter from './routers/api/sessions.router.js';
 import indexRouter from './routers/views/index.router.js';
 import notificationRouter from './routers/api/notifications.router.js';
+import mockingRouter from './routers/api/mocking.router.js';
 
 const app = express();
 // const SESSION_SECRET = config.sessionSecret;
@@ -46,7 +49,9 @@ app.use(cookieParser());
 // }))
 
 
-
+app.use(compression({
+    brotli:{enabled:true, zlib:{}}
+}));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -68,6 +73,7 @@ app.use('/products', productsRouter);
 app.use('/realtimeproducts', realTimeProductsRouter);
 app.use('/home', homeRouter);
 app.use('/notification', notificationRouter);
+app.use('/mocking', mockingRouter);
 app.use('/', indexRouter); 
 app.use('/*', notFoundRouter);
 
@@ -77,6 +83,8 @@ app.use((error, req, res, next) => {
     console.error(message);
     res.status(500).json({ message });
 })
+
+app.use(errorHandlerMiddleware);
 
 export default app;
 

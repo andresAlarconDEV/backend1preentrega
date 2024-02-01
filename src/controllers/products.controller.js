@@ -30,7 +30,7 @@ export default class ProductsController {
         // let codeExist = this.products.find(e => e.code === code);
         const codeExist = await ProductsService.getProductByCode(code);
         if (!codeExist) {
-            if (title && description && price && code && stock && category &&  status) {
+            if (title && description && price && code && stock && category) {
                 const newProduct = {
                     ...body,
                     status: 1

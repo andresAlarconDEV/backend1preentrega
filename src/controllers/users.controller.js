@@ -1,5 +1,8 @@
 import UsersService from "../services/user.service.js";
 import { createHash, isValidPassword } from '../utils2.js'
+import { CustomError } from "../utils/CustomError.js";
+import { generatorUserError, generatorUserIdError } from "../utils/CauseMessageError.js";
+import EnumsError from "../utils/EnumsError.js";
 
 const localAdmin = {
     email: 'adminCoder@coder.com',
@@ -31,7 +34,17 @@ export default class UsersController {
                 email,
                 password }, } = req;
         if (!first_name || !last_name || !email || !password) {
-            return done(new Error('Todos los campos son requeridos.'));
+            CustomError.create({
+                name: 'Invalid data user',
+                cause: generatorUserError({
+                  first_name,
+                  last_name,
+                  email,
+                  age,
+                }),
+                message: 'Ocurrio un error mientras intentamos crear un nuevo usuario',
+                code: EnumsError.INVALID_PARAMS_ERROR
+              })
         }
         const user = {
             first_name,
