@@ -13,3 +13,9 @@ export const generatorUserError = (data) => {
       Valor recibido: ${id}
     `;
   };
+
+  export const generatorLoginError = (email) => {
+    return `El usuario o contraseña son incorrectos.
+      Valor recibido: ${email}
+    `;
+  };

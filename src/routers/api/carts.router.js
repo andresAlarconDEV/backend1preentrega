@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import CartsController from '../../controllers/carts.controller.js'
 import CartsManager from '../../dao/Dao/Carts.manager.js';
-import { authMiddleware, authRolesMiddleware } from '../../utils2.js';
+import { authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
 
 const router = Router();
 

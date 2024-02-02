@@ -1,7 +1,7 @@
 import { Router }  from 'express';
 import CartsManager from '../../dao/Dao/Carts.manager.js';
 import CartsController from '../../controllers/carts.controller.js'
-import { buildResponseProductsInCart } from '../../utils2.js';
+import { buildResponseProductsInCart } from '../../utils/utils2.js';
 
 const router = Router();
 

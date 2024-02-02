@@ -1,6 +1,6 @@
 import CartsService from "../services/cart.service.js";
 import ProductsService from "../services/product.service.js";
-import { buildResponsePaginated } from '../utils2.js';
+import { buildResponsePaginated } from '../utils/utils2.js';
 import UsersService from "../services/user.service.js";
 import TicketsController from "./tickets.controller.js";
 // import

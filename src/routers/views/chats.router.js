@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authMiddleware, authRolesMiddleware } from '../../utils2.js';
+import { authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
 
 const router = Router();
 

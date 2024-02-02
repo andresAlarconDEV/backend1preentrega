@@ -1,5 +1,5 @@
 import path from 'path';
-import config from './config/config.js';
+import config from '../config/config.js';
 import url from 'url';
 import bcrypt from 'bcrypt';
 import JWT from 'jsonwebtoken';

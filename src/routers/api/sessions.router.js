@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import UsersController from '../../controllers/users.controller.js';
 import passport from 'passport';
-import { generateToken, validateToken, authMiddleware, authRolesMiddleware } from '../../utils2.js';
+import { generateToken, validateToken, authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
 import UserDTO from '../../dto/user.dto.js';
 
 const router = Router();

@@ -2,7 +2,7 @@ import { Router } from 'express';
 // import ProductsManager from '../../dao/Dao/Products.manager.js';
 import ProductsController from '../../controllers/products.controller.js'
 const router = Router();
-import { authMiddleware, authRolesMiddleware } from '../../utils2.js';
+import { authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
 
 router.get('/products', authMiddleware("jwt"), async (req, res) => {
     const endpoint = 'products/api/'; 

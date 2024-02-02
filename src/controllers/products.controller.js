@@ -1,5 +1,5 @@
 import ProductsService from "../services/product.service.js";
-import { buildResponsePaginated } from '../utils2.js';
+import { buildResponsePaginated } from '../utils/utils2.js';
 
 export default class ProductsController {
 

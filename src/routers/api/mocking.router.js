@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { generateProduct } from '../../utils2.js';
+import { generateProduct } from '../../utils/utils2.js';
 import config from '../../config/config.js';
 
 const router = Router();
