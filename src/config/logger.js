@@ -46,12 +46,7 @@ export const devLogger = winston.createLogger({
                 winston.format.colorize({ colors: customeLevelOpts.colors }),
                 winston.format.simple(),
             ),
-        }),
-        new winston.transports.File({
-            filename: './errors.log',
-            level: 'debug',
-            format: winston.format.simple(),
-        }),
+        })
     ],
 });
 
