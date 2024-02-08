@@ -10,7 +10,6 @@ router.use('/', async (req, res) => {
         res.redirect('/login');
     } else {
     const endpoint = 'products/';
-    console.log(req.user);
     const { query } = (req);
     const data = await ProductsController.getAll(query, endpoint);
     res.render('product', {title: 'listado de productos', ...data, user: req.user.toJSON() });

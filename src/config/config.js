@@ -4,6 +4,7 @@ dotenv.config();
 
 export default {
     port: process.env.PORT || 3000,
+    env: process.env.ENV || "DEV",
     mongodbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce',
     sessionSecret: process.env.SESSION_SECRET || '123456789',
     githubOptions: process.env.GITHUB_OPTIONS,

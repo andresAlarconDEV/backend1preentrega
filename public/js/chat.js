@@ -1,3 +1,4 @@
+import { logger } from '../../src/config/logger.js';
 (function () {
     let user;
     const socket = io();
@@ -19,7 +20,7 @@
         
 
     socket.on('update-conversation', (conversation) => {
-        console.log('conversation', conversation);
+        logger.debug('conversation', conversation);
         const logMessages = document.getElementById('log-messages');
         logMessages.innerText = '';
         conversation.forEach((message) => {
@@ -41,10 +42,10 @@
     })
         .then((result) => {
             user = result.value.trim();
-            console.log('user', user);
+            logger.info('user', user);
         })
         .catch((error) => {
-            console.error('Ah ocurrido un error al capturar el nombre 😨:', error.message);
+            logger.error('Ah ocurrido un error al capturar el nombre 😨:', error.message);
         });
 
 })();

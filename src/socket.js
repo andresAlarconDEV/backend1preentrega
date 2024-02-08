@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import products from "./dao/Dao/productManager.js";
 import MessagesManager from "./dao/Dao/Messages.manager.js";
+import { logger } from "./config/logger.js";
 
 
 
@@ -21,7 +22,7 @@ export const initSocket = (httpserver) => {
         io = new Server(httpserver);
 
         io.on('connection', (socketClient) => {
-            console.log("nuevo cliente socket conectado: " + socketClient.id);
+            logger.http("nuevo cliente socket conectado: " + socketClient.id);
 
 
         socketClient.emit('products', listProducts);

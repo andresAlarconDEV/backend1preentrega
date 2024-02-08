@@ -13,6 +13,7 @@ import { __dirname } from './utils/utils2.js';
 import { URI } from './db/mongodb.js';
 import { init as initPassport } from './config/passport.config.js';
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware.js';
+import { addLogger } from './config/logger.js';
 
 import productRouter from './routers/api/products.router.js';
 import cartRouter from './routers/api/carts.router.js';
@@ -26,6 +27,7 @@ import sessionsRouter from './routers/api/sessions.router.js';
 import indexRouter from './routers/views/index.router.js';
 import notificationRouter from './routers/api/notifications.router.js';
 import mockingRouter from './routers/api/mocking.router.js';
+import loggerRouter from './routers/api/logger.router.js';
 
 const app = express();
 // const SESSION_SECRET = config.sessionSecret;
@@ -36,17 +38,6 @@ const corsOptions = {
 }
 
 app.use(cookieParser());
-// app.use(sessions({
-    //     store: MongoStore.create({
-        //         mongoUrl: URI,
-        //         mongoOptions: {},
-        //         ttl: 200,
-        
-        //     }),
-        //     secret: SESSION_SECRET,
-        //     resave: true,
-        //     saveUninitialized: true
-        // }))
         
         
         app.use(compression({
@@ -56,6 +47,7 @@ app.use(cookieParser());
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(express.static(path.join(__dirname, '../public')));
+        app.use(addLogger);
         
         app.engine('handlebars', handlebars.engine());
         app.set('views', path.join(__dirname, 'views'));
@@ -74,15 +66,9 @@ app.use(cookieParser());
         app.use('/home', homeRouter);
         app.use('/notification', notificationRouter);
         app.use('/mocking', mockingRouter);
+        app.use('/loggerTest', loggerRouter);
         app.use('/', indexRouter); 
         app.use('/*', notFoundRouter);
-        
-        
-        // app.use((error, req, res, next) => {
-        //     const message = 'ocurrio un error desconocido: ' + error.message;
-        //     console.error(message);
-        //     res.status(500).json({ message });
-        // })
         
         app.use(errorHandlerMiddleware);
         
