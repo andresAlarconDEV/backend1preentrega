@@ -23,7 +23,7 @@ export const prodLogger = winston.createLogger({
     levels: customeLevelOpts.levels,
     transports: [
         new winston.transports.Console({
-            level: 'http',
+            level: 'info',
             format: winston.format.combine(
                 winston.format.colorize({ colors: customeLevelOpts.colors }),
                 winston.format.simple(),
@@ -31,7 +31,7 @@ export const prodLogger = winston.createLogger({
         }),
         new winston.transports.File({
             filename: './errors.log',
-            level: 'warning',
+            level: 'error',
             format: winston.format.simple(),
         }),
     ],
