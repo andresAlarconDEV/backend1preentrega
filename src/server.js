@@ -3,13 +3,12 @@ import config from "./config/config.js"
 import app from "./app.js";
 import { initSocket } from "./socket.js";
 const server = http.createServer(app);
-import { init } from './db/mongodb.js';
+import MongoDb from './db/mongodb.js';
 import { logger } from './config/logger.js';
 
+const mongodb = await MongoDb.getInstance();
 
 const PORT = config.port;
-
-await init();
 
 initSocket(server);
 

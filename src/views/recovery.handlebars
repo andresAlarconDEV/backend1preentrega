@@ -1,0 +1,29 @@
+<div class="wrapper">
+    <div class="logo">
+        <img src="http://localhost:8080/img/icono.png" alt="">
+    </div>
+    <div class="text-center mt-4 name">
+        Recuperar Contraseña
+    </div>
+    {{#if error}}
+    <div>
+        <p style="color: rgb(129, 44, 44)">{{error}}</p>
+    </div>
+    {{/if}}
+        {{#if success}}
+    <div>
+        <p style="color: rgba(70, 194, 101, 0.932)">{{success}}</p>
+    </div>
+    {{/if}}
+    <form  class="p-3 mt-3" action="/api/sessions/recovery" method="post">
+        <div class="form-field d-flex align-items-center">
+            <span class="far fa-user"></span>
+            <input type="email" name="email" id="email" placeholder="Email" required>
+        </div>
+        <button class="btn mt-3" type="submit">Enviar Correo</button>
+    </form>
+        <div class="text-center fs-6">
+        <a href="/login">Regresar</a>
+    </div>
+
+</div>

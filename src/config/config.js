@@ -18,6 +18,7 @@ export default {
     emailService: process.env.EMAIL_SERVICE,
     emailPort: process.env.EMAIL_PORT},
     jwtSecret: process.env.JWT_SECRET,
+    jwtSecretRecovery: process.env.JWT_SECRETRECOVERY,
     twilio: {
         accountSid: process.env.TWILIO_ACCOUNT_SID,
         authToken: process.env.TWILIO_AUTH_TOKEN,

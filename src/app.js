@@ -10,7 +10,6 @@ import cors from 'cors';
 import config from "./config/config.js"
 
 import { __dirname } from './utils/utils2.js';
-import { URI } from './db/mongodb.js';
 import { init as initPassport } from './config/passport.config.js';
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware.js';
 import { addLogger } from './config/logger.js';
@@ -37,6 +36,7 @@ const corsOptions = {
     methods: ['GET','POST','PUT','DELETE']
 }
 
+app.use(addLogger);
 app.use(cookieParser());
         
         
@@ -47,7 +47,7 @@ app.use(cookieParser());
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(express.static(path.join(__dirname, '../public')));
-        app.use(addLogger);
+        
         
         app.engine('handlebars', handlebars.engine());
         app.set('views', path.join(__dirname, 'views'));

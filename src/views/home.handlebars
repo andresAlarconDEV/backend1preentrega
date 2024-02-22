@@ -7,14 +7,14 @@
             <th scope="col">Titulo</th>
             <th scope="col">Descripción</th>
             <th scope="col">Precio</th>
-            <th scope="col">Stock</th>
+            <th scope="col">Stock </th>
         </tr>
     </thead>
     <tbody>
         {{#each products}}
         {{#if this.status}}
         <tr>
-            <th scope="row">{{this.code}}</th>
+            <th scope="row">{{this.products}}</th>
             <td>{{this.category}}</td>
             <td>{{this.title}}</td>
             <td>{{this.description}}</td>

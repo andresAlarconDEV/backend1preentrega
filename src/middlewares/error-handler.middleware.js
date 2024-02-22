@@ -22,6 +22,9 @@ export const errorHandlerMiddleware = (error, req, res, next) => {
         case EnumsError.UNAUTHORIZED_ERROR:
             res.status(401).json({ status: 'error', message: error.message });
             break;
+        case EnumsError.TOKEN_ERROR:
+            res.status(401).json({ status: 'error', message: error.message });
+            break;
         default:
             res.status(500).json({ status: 'error', message: error.message });
             break;

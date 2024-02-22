@@ -21,4 +21,8 @@ export default class UserDaoMongoDB {
     static postCartUser (uid, cid){
         return UserModel.updateOne({_id: uid}, { $push: {carts: {"idCart": cid} }});
     }
+
+    static postChangePass (email, password){
+        return UserModel.updateOne({email: email}, {$set: {password: password}});
+    }
 }

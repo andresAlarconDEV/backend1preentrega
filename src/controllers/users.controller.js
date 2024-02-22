@@ -1,7 +1,7 @@
 import UsersService from "../services/user.service.js";
 import { createHash, isValidPassword } from '../utils/utils2.js'
 import { CustomError } from "../utils/CustomError.js";
-import { generatorUserError, generatorUserIdError, generatorLoginError } from "../utils/CauseMessageError.js";
+import { generatorUserError, generatorLoginError, generatorEmailError, changePassError } from "../utils/CauseMessageError.js";
 import EnumsError from "../utils/EnumsError.js";
 
 const localAdmin = {
@@ -16,8 +16,22 @@ export default class UsersController {
         return UsersService.getAll();
     }
 
-    static getByEmail(email) {
-        return UsersService.getByEmail(email);
+    static async getByEmail(email) {
+        const user = await UsersService.getByEmail(email);
+        if (user) {
+            return user;
+        } else {
+            // throw new Error('El Email ingresado no esta registrado en nuestra pagina');
+            CustomError.create({
+                name: 'Not found email',
+                cause: generatorEmailError({
+                    email: email
+                }),
+                message: 'El Email ingresado no esta registrado en nuestra pagina',
+                code: EnumsError.NOTFOUND_ERROR,
+            });
+
+        }
     }
 
     static getById(email) {
@@ -86,6 +100,37 @@ export default class UsersController {
             };
             return user;
         }
+    }
+
+    static async postChangePass(email, body) {
+        const { password, confirmPassword } = body;
+        if (password === confirmPassword) {
+            const user = await UsersService.getByEmail(email);
+            const isNotValidPass = isValidPassword(password, user);
+            if (!isNotValidPass) {
+            const passwordChange = createHash(password);
+                await UsersService.postChangePass(email, passwordChange);
+                console.log("se cambio la contraseña");
+                return ("OK")
+            } else {
+                CustomError.create({
+                    name: 'Invalid change Password',
+                    cause: changePassError(body),
+                    message: 'La contraseña debe ser distinta a las anteriormente usadas',
+                    code: EnumsError.UNAUTHORIZED_ERROR
+                });
+            }
+        }
+        else {
+            CustomError.create({
+                name: 'Invalid change Password',
+                cause: changePassError(body),
+                message: 'Las contraseñas no coinciden',
+                code: EnumsError.UNAUTHORIZED_ERROR
+            });
+        }
+
+
     }
 
 }

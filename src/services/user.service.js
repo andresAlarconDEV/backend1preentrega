@@ -23,4 +23,8 @@ export default class UsersService {
     static postCartUser (uid, cid){
         return usersRepository.postCartUser(uid, cid);
     }
+
+    static postChangePass (email, password){
+        return usersRepository.postChangePass(email, password);
+    }
 }

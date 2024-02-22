@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import UsersController from '../../controllers/users.controller.js';
+import EmailService from '../../services/email.service.js';
 import passport from 'passport';
-import { generateToken, validateToken, authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
+import { generateToken, generateRecoveryToken, validateRecoveryToken, authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
 import UserDTO from '../../dto/user.dto.js';
+import config from '../../config/config.js';
 
 const router = Router();
 
@@ -19,28 +21,14 @@ router.post('/sessions/login', async (req, res, next) => {
       httpOnly: true,
     })
       .status(200)
-      .json({ status: 'success' })
-      // .redirect('/products');
+      // .json({ status: 'success' })
+      .redirect('/products');
   } catch (error) {
     next(error)
   }
  
 });
 
-
-// router.post('/sessions/login', async(req, res) => {
-//     // const { body } = req;
-//     // try {
-//         // const user = await UsersManager.loginUser(body);
-//         // req.session.user = user;
-//         // res.status(201).send({message: 'sesión iniciada correctamente'});
-//         res.redirect('/products');
-//     // }
-//     // catch (error) {
-//     //     // res.status(401).send({message: error.message});
-//     //     return res.render('login', {message: error, failed: true });
-//     // }
-// })
 
 
 
@@ -53,20 +41,6 @@ router.post('/sessions/register', async (req, res, next) => {
   }
 });
 
-// router.post('/sessions/register', passport.authenticate('register', { failureRedirect: '/register' }), async (req, res) => {
-//     // const { body } = req;
-//     // try {
-//         // res.status(201).json(await UsersManager.addUser(body));
-//         // await UsersManager.addUser(body);
-//         // return res.render('login', {message: 'Usuario creado correctamente, use los datos registrados para ingresar', createOK: true });
-//         // res.render('login', {message: 'Usuario creado correctamente, use los datos registrados para ingresar', createOK: true });
-//         res.redirect('/login');
-//     // } 
-//     // catch (error) {
-//         // res.status(400).send(error.message);
-//         // return res.render('register', {message: 'No fue posible crear el usuario: Valide sus datos o contacte con el administrador del sistema', failed: true });
-//     // }
-// });
 
 router.get('/sessions/current', authMiddleware('jwt'), async (req, res) => {
     // if (!req.user) {
@@ -92,6 +66,58 @@ router.post('/session/logout', (req, res) => {
 
   router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
     res.redirect('/products');
+  });
+
+
+  router.post('/sessions/recovery', async (req, res, next) => {
+    const { email } = req.body;
+    try {
+      const user = await UsersController.getByEmail(email);
+      const emailService = EmailService.getInstance();
+      const token = generateRecoveryToken(email);
+      const result = await emailService.sendEmail(
+        email,
+        'Recuperación de contraseña - BikeShop',
+        `<!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Recuperar Contraseña</title>
+        </head>
+        <body style="font-family: Arial, sans-serif;">
+            <h2>Recuperar Contraseña</h2>
+            <p>Hola,</p>
+            <p>Haz clic en el siguiente botón para restablecer tu contraseña:</p>
+            <a href="http://localhost:${config.port}/changePassword?token=${token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Restablecer Contraseña</a>
+            <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este mensaje.</p>
+            <p>Saludos,<br>BikeShop</p>
+        </body>
+        </html>`);
+      res.status(200).render('recovery', {title: 'Recuperar contraseña', success: 'se ha enviado un correo con el link de recuperación'});
+      // res.status(200).redirect('recovery');
+    } catch (error) {
+      res.render('recovery', {title: 'Recuperar contraseña', error: error.message});
+    }
+  });
+
+
+  router.post('/sessions/changePass', async (req, res) => {
+    const { token } = req.query;
+    const { body } = req;
+
+    try{
+      const payload = await validateRecoveryToken(token);
+      const { email } = payload;
+      const responseChange = await UsersController.postChangePass(email, body);
+            res.status(200).redirect('/confirmPass');
+    }catch(error){
+      if (error.code=== 8){
+        res.redirect('/recovery');
+      }else{
+      res.render('changePass', {title: 'Recuperar contraseña', error: error.message});
+    }}
+
   });
 
 

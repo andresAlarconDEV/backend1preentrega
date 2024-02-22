@@ -1,0 +1,39 @@
+<div class="wrapper">
+    <div class="logo">
+        <img src="http://localhost:8080/img/icono.png" alt="">
+    </div>
+    <div class="text-center mt-4 name">
+        BikeShop
+    </div>
+    {{#if error}}
+    <div>
+        <p style="color: rgb(129, 44, 44)">{{error}}</p>
+    </div>
+    {{/if}}
+    {{#if success}}
+    <div>
+        <p style="color: green">{{success}}</p>
+    </div>
+    {{/if}}
+    <form id="changePass" class="p-3 mt-3" action="" method="post">
+        <div class="form-field d-flex align-items-center">
+            <span class="far fa-user"></span>
+            <input type="password" name="password" id="password" placeholder="contraseña" required>
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <span class="fas fa-key"></span>
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="confirma contraseña" required>
+        </div>
+        <button class="btn mt-3" type="submit">Cambiar Contraseña</button>
+    </form>
+    <div class="text-center fs-6">
+        <a href="/login">Inicio</a>
+    </div>
+</div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    console.log(token);
+    const changePass = document.getElementById('changePass');
+    changePass.action = `/api/sessions/changePass?token=${token}`;
+</script>

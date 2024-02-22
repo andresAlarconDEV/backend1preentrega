@@ -10,7 +10,7 @@ router.get('/sendEmail', async(req, res) => {
 const emailService = EmailService.getInstance();
 const result = await emailService.sendEmail(
     'valarcon2712@gmail.com',
-    'Prueba de envio de Mail',
+    'Recuperación de contraseña - BikeShop',
     '<p>HOLA, PRUEBA</p><img src="cid:api.png" alt="api" />',
     [{
         filename: 'api.png',

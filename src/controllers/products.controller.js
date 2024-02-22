@@ -4,6 +4,7 @@ import { buildResponsePaginated } from '../utils/utils2.js';
 export default class ProductsController {
 
     static async getAll(query, endpoint) {
+        // console.log(query)
         const { limit=4, page=1, sort, search } = query;
         // sort por price, ASC/DESC
         // search por category

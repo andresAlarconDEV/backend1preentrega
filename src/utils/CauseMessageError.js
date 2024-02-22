@@ -19,3 +19,23 @@ export const generatorUserError = (data) => {
       Valor recibido: ${email}
     `;
   };
+
+  export const generatorEmailError = (email) => {
+    return `Email no registrado.
+      Valor recibido: ${email.email}
+    `;
+  };
+
+  export const changePassError = (body) => {
+    return `Error en validar password.
+      Valor recibido pass: ${body.password}
+      Valor recibido passConfirmacion: ${body.confirmPassword}
+    `;
+  };
+
+  export const validateTokenError = (body) => {
+    return `Error en validar Token.
+      Valor recibido Token: ${body}
+
+    `;
+  };

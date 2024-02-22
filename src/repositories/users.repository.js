@@ -24,4 +24,8 @@ export default class UserRepository {
         return this.dao.postCartUser(uid, cid);
     }
 
+    postChangePass(email, password){
+        return this.dao.postChangePass(email, password);
+    }
+
 }

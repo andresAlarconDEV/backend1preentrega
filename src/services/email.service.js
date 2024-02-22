@@ -6,7 +6,7 @@ export default class EmailService {
     static #instance = null
     constructor(){
         this.transport = nodemailer.createTransport({
-            service: config.email.emailService,
+            service: config.email.emailService, 
             port: config.email.emailPort,
             auth: {
                 user: config.email.emailUser,
