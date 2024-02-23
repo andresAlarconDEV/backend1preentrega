@@ -34,8 +34,8 @@ export default class UsersController {
         }
     }
 
-    static getById(email) {
-        return UsersService.getById(email);
+    static getById(uid) {
+        return UsersService.getById(uid);
     }
 
     static async postUser(req) {
@@ -129,7 +129,26 @@ export default class UsersController {
                 code: EnumsError.UNAUTHORIZED_ERROR
             });
         }
+    }
 
+    static async changeRole(uid){
+        const user = await UsersService.getById(uid);
+        let response;
+        if (user.role === "premium"){
+            await UsersService.putChangeRole(uid, "user");
+            response = "user";
+        }else if (user.role === "user"){
+            await UsersService.putChangeRole(uid, "premium");
+            response = "premium";
+        }else{
+            CustomError.create({
+                name: 'Invalid Role',
+                cause: changePassError(uid),
+                message: 'Error en el rol de usuario, no se puee cambiar',
+                code: EnumsError.UNAUTHORIZED_ERROR
+            });
+        }
+        return response;
 
     }
 

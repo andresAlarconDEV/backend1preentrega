@@ -17,7 +17,7 @@ router.post('/sessions/login', async (req, res, next) => {
     const user = await UsersController.getLoginUser(req.body);
     const token = generateToken(user);
     res.cookie('token', token, {
-      maxAge: 1000 * 60,
+      maxAge: 1000 * 900,
       httpOnly: true,
     })
       .status(200)
@@ -112,13 +112,23 @@ router.post('/session/logout', (req, res) => {
       const responseChange = await UsersController.postChangePass(email, body);
             res.status(200).redirect('/confirmPass');
     }catch(error){
-      if (error.code=== 8){
+      if (error.code === 8){
         res.redirect('/recovery');
       }else{
       res.render('changePass', {title: 'Recuperar contraseña', error: error.message});
     }}
 
   });
+
+  router.put('/users/premium/:uid',authMiddleware("jwt"), authRolesMiddleware(['admin']), async (req, res) => {
+    const { uid } = req.params;
+    try{
+    const role = await UsersController.changeRole(uid);
+    res.status(201).json({message: `Se realizo el cambio del rol por ${role}`});
+    }catch(error){
+      res.status(404).send(error.message);
+    }
+  })
 
 
 export default router;

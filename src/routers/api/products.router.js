@@ -26,18 +26,18 @@ router.get('/products/:pid([a-zA-Z0-9]+)', authMiddleware("jwt"), async (req, re
     }
 });
 
-router.post('/products', authMiddleware("jwt"), authRolesMiddleware('admin'), async (req, res) => {
+router.post('/products', authMiddleware("jwt"), authRolesMiddleware(['admin','premium']), async (req, res) => {
     const { body } = req;
     // const img = req.file.path;
     try {
-        res.status(201).json(await ProductsController.addProduct(body));
+        res.status(201).json(await ProductsController.addProduct(req, body));
     }
     catch (error) {
         res.status(400).send(error.message);
     }
 });
 
-router.put('/products/:pid', authMiddleware("jwt"), authRolesMiddleware('admin'), async (req, res) => {
+router.put('/products/:pid', authMiddleware("jwt"), authRolesMiddleware(['admin']), async (req, res) => {
     const { pid } = req.params;
     const { body } = req;
     try {
@@ -48,10 +48,10 @@ router.put('/products/:pid', authMiddleware("jwt"), authRolesMiddleware('admin')
     }
 });
 
-router.delete('/products/:pid', authMiddleware("jwt"), authRolesMiddleware('admin'), async (req, res) => {
+router.delete('/products/:pid', authMiddleware("jwt"), authRolesMiddleware(['admin', 'premium']), async (req, res) => {
     const { pid } = req.params;
     try {
-        res.status(201).json(await ProductsController.deleteProduct(pid));
+        res.status(201).json(await ProductsController.deleteProduct(req, pid));
     }
     catch (error) {
         res.status(404).send(error.message);

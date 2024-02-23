@@ -114,7 +114,7 @@ export const authRolesMiddleware = (role) => (req, res, next) => {
         return res.status(401).json({ message: 'Unauthorized' });
     }
     const { role: userRole } = req.user;
-    if (userRole !== role) {
+    if (!role.includes(userRole)) {
         return res.status(403).json({ message: 'No permissions' });
     }
     next();

@@ -25,4 +25,8 @@ export default class UserDaoMongoDB {
     static postChangePass (email, password){
         return UserModel.updateOne({email: email}, {$set: {password: password}});
     }
+    static putChangeRole (uid, role){
+        return UserModel.updateOne({_id: uid }, {$set: {role: role}});
+    }    
+    
 }

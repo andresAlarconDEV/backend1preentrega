@@ -27,4 +27,8 @@ export default class UsersService {
     static postChangePass (email, password){
         return usersRepository.postChangePass(email, password);
     }
+
+    static putChangeRole (uid, role){
+        return usersRepository.putChangeRole(uid, role);
+    }
 }

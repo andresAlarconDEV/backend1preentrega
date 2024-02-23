@@ -25,7 +25,7 @@ router.get('/carts/:cid', authMiddleware("jwt"), async (req, res) => {
 });
 
 
-router.post('/carts', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
+router.post('/carts', authMiddleware("jwt"), authRolesMiddleware(['user','premium']), async (req, res) => {
     try {
         res.status(201).json(await CartsController.addCart(req));
     }
@@ -34,10 +34,10 @@ router.post('/carts', authMiddleware("jwt"), authRolesMiddleware('user'), async 
     }
 });
 
-router.post('/carts/:cid/product/:pid',  authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
+router.post('/carts/:cid/product/:pid',  authMiddleware("jwt"), authRolesMiddleware(['user','premium']), async (req, res) => {
     const { cid, pid } = req.params;
     try {
-        res.status(201).json(await CartsController.addProductInCart(cid, pid));
+        res.status(201).json(await CartsController.addProductInCart(cid, pid, req));
     }
     catch (error) {
         res.status(404).send(error.message);
@@ -54,7 +54,7 @@ router.delete('/carts/:cid/product/:pid', authMiddleware("jwt"), async (req, res
     }
 });
 
-router.put('/carts/:cid',  authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
+router.put('/carts/:cid',  authMiddleware("jwt"), authRolesMiddleware(['user']), async (req, res) => {
     const { cid } = req.params;
     const { body } = req;
     try {
@@ -65,7 +65,7 @@ router.put('/carts/:cid',  authMiddleware("jwt"), authRolesMiddleware('user'), a
     }
 });
 
-router.put('/carts/:cid/product/:pid', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
+router.put('/carts/:cid/product/:pid', authMiddleware("jwt"), authRolesMiddleware(['user']), async (req, res) => {
     const { cid, pid } = req.params;
     const { body } = req;
     try {
@@ -76,7 +76,7 @@ router.put('/carts/:cid/product/:pid', authMiddleware("jwt"), authRolesMiddlewar
     }
 });
 
-router.delete('/carts/:cid', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res)=> {
+router.delete('/carts/:cid', authMiddleware("jwt"), authRolesMiddleware(['user']), async (req, res)=> {
     const { cid } = req.params;
     try {
         res.status(201).json(await CartsController.deleteAllProductCart( cid ));
@@ -86,7 +86,7 @@ router.delete('/carts/:cid', authMiddleware("jwt"), authRolesMiddleware('user'),
     }
 });
 
-router.post('/carts/:cid/purchase', authMiddleware("jwt"), authRolesMiddleware('user'), async (req, res) => {
+router.post('/carts/:cid/purchase', authMiddleware("jwt"), authRolesMiddleware(['user']), async (req, res) => {
     try {
         res.status(200).json(await CartsController.postPurchase(req))
     }

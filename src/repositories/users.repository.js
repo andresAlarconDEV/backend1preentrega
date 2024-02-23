@@ -28,4 +28,8 @@ export default class UserRepository {
         return this.dao.postChangePass(email, password);
     }
 
+    putChangeRole(uid, role){
+        return this.dao.putChangeRole(uid, role);
+    }
+
 }
