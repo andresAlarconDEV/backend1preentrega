@@ -3,11 +3,10 @@ import compression from 'express-compression';
 import handlebars from 'express-handlebars';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-// import sessions from 'express-session';
-import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import cors from 'cors';
-import config from "./config/config.js"
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 import { __dirname } from './utils/utils2.js';
 import { init as initPassport } from './config/passport.config.js';
@@ -38,43 +37,57 @@ const corsOptions = {
 
 app.use(addLogger);
 app.use(cookieParser());
-        
-        
-        app.use(compression({
-            brotli:{enabled:true, zlib:{}}
-        }));
-        app.use(cors(corsOptions));
-        app.use(express.json());
-        app.use(express.urlencoded({ extended: true }));
-        app.use(express.static(path.join(__dirname, '../public')));
-        
-        
-        app.engine('handlebars', handlebars.engine());
-        app.set('views', path.join(__dirname, 'views'));
-        app.set('view engine', 'handlebars');
-        
-        initPassport();
-        app.use(passport.initialize());
-        // app.use(passport.session());
-        
-        
-        app.use('/api', productRouter, cartRouter, sessionsRouter);
-        app.use('/carts', cartsRouter);
-        app.use('/chat', messageRouter);
-        app.use('/products', productsRouter);
-        app.use('/realtimeproducts', realTimeProductsRouter);
-        app.use('/home', homeRouter);
-        app.use('/notification', notificationRouter);
-        app.use('/mocking', mockingRouter);
-        app.use('/loggerTest', loggerRouter);
-        app.use('/', indexRouter); 
-        app.use('/*', notFoundRouter);
-        
-        app.use(errorHandlerMiddleware);
-        
-        export default app;
-        
-        
+
+
+app.use(compression({
+    brotli:{enabled:true, zlib:{}}
+}));
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../public')));
+
+
+app.engine('handlebars', handlebars.engine());
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'handlebars');
+
+initPassport();
+app.use(passport.initialize());
+// app.use(passport.session());
+const test= path.join(__dirname, 'docs','**', '*.yaml');
+console.log(test)
+const swaggerOpts = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'API Ecommerce BikeShop',
+            description: 'Documentación API de BikeShop Ecommerce.'
+        },
+    },
+    apis: [path.join(__dirname, 'docs','**', '*.yaml')],
+};
+const specs = swaggerJsDoc(swaggerOpts);
+app.use('/api-swagger', swaggerUi.serve, swaggerUi.setup(specs));
+
+app.use('/api', productRouter, cartRouter, sessionsRouter);
+app.use('/carts', cartsRouter);
+app.use('/chat', messageRouter);
+app.use('/products', productsRouter);
+app.use('/realtimeproducts', realTimeProductsRouter);
+app.use('/home', homeRouter);
+app.use('/notification', notificationRouter);
+app.use('/mocking', mockingRouter);
+app.use('/loggerTest', loggerRouter);
+app.use('/', indexRouter); 
+app.use('/*', notFoundRouter);
+
+
+app.use(errorHandlerMiddleware);
+
+export default app;
+    
+    
         
         
         

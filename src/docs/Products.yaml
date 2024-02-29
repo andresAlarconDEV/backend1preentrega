@@ -1,0 +1,231 @@
+paths:
+  /api/products/:
+    get:
+      summary: Listar Productos
+      tags:
+        - Products
+      responses:
+        200:
+          description: Los productos fueros obtenidos exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la respuesta
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+        500:
+          description: Error interno.
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/createProducts'
+      responses:
+        201:
+          description: Producto creado correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        500:
+          description: Error interno del servidor.
+    
+
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto por su ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        200:
+          description: Producto obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        404:
+          description: Producto no encontrado
+        500:
+          description: Error interno del servidor
+    put:
+      summary: Modificar un producto
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/modifyProducts'
+      responses:
+        202:
+          description: Producto modificado correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        404:
+          description: Producto no encontrado
+        500:
+          description: Error interno del servidor.
+    delete:
+      summary: Eliminar un producto
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        201:
+          description: Producto eliminado correctamente.
+        404:
+          description: Producto no encontrado
+        500:
+          description: Error interno del servidor.
+
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id de producto autogenerado.
+        title:
+          type: string
+          description: Titulo del nombre del producto.
+        code:
+          type: string
+          description: Codigo del producto (dato unico).
+        description:
+          type: string
+          description: Descripción de producto.
+        category:
+          type: string
+          description: Categoria del producto.
+        price:
+          type: number
+          description: Precio en pesos Colombianos del producto.
+        stock:
+          type: number
+          description: Cantidad de items disponibles por producto.
+        thumbnail:
+          type: string
+          description: Imagen del producto.
+        status:
+          type: boolean
+          description: Estado del producto.
+        owner:
+          type: string
+          description: Id del creador del producto.
+      example:
+        _id: 3423fe234f345a4bb2a0
+        title: Badana de Colombia
+        code: bad001
+        description: Badana de licra con culote de gel
+        category: Badana
+        price: 100000
+        stock: 15
+        thumbnail: https://rominajorge.com/wp-content/uploads/2020/04/como-hacer-citas-bibliogr%C3%A1ficas.jpg
+        status: 1
+        owner: 655a94c6a198103edd6293e2
+        createdAt: 2023-11-18T05:28:43.018Z
+        updatedAt: 2023-11-30T03:03:06.001Z
+  requestBodies:
+    createProducts:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Titulo del nombre del producto.
+        code:
+          type: string
+          description: Codigo del producto (dato unico).
+        description:
+          type: string
+          description: Descripción de producto.
+        category:
+          type: string
+          description: Categoria del producto.
+        price:
+          type: number
+          description: Precio en pesos Colombianos del producto.
+        stock:
+          type: number
+          description: Cantidad de items disponibles por producto.
+        thumbnail:
+          type: string
+          description: Imagen del producto.
+        status:
+          type: boolean
+          description: Estado del producto.
+      example:
+        title: Badana de Colombia
+        code: bad001
+        description: Badana de licra con culote de gel
+        category: Badana
+        price: 100000
+        stock: 15
+        thumbnail: https://rominajorge.com/wp-content/uploads/2020/04/como-hacer-citas-bibliogr%C3%A1ficas.jpg
+        status: 1
+    modifyProducts:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Titulo del nombre del producto.
+        code:
+          type: string
+          description: Codigo del producto (dato unico).
+        description:
+          type: string
+          description: Descripción de producto.
+        category:
+          type: string
+          description: Categoria del producto.
+        price:
+          type: number
+          description: Precio en pesos Colombianos del producto.
+        stock:
+          type: number
+          description: Cantidad de items disponibles por producto.
+        thumbnail:
+          type: string
+          description: Imagen del producto.
+        status:
+          type: boolean
+          description: Estado del producto.
+      example:
+        description: Badana de licra con culote de gel
