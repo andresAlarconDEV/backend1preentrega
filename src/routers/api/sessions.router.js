@@ -21,8 +21,8 @@ router.post('/sessions/login', async (req, res, next) => {
       httpOnly: true,
     })
       .status(200)
-      // .json({ status: 'success' })
-      .redirect('/products');
+      .json({ status: 'success' })
+      // .redirect('/products');
   } catch (error) {
     next(error)
   }

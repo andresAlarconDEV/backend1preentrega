@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon ."
+    "dev": "nodemon .",
+    "test:integrations": "mocha --timeout 10000 ./tests/integrations/*.test.js"
   },
   "keywords": [],
   "author": "Victor Andres Alarcon",
@@ -39,6 +40,9 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.0",
-    "dotenv": "^16.3.1"
+    "chai": "^5.1.0",
+    "dotenv": "^16.3.1",
+    "mocha": "^10.3.0",
+    "supertest": "^6.3.4"
   }
 }
