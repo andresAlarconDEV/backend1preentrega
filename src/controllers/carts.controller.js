@@ -28,8 +28,10 @@ export default class CartsController {
     static async addProductInCart(cid, pid, req) {
         let productExist = await ProductsService.getProductById(pid);
         const uid = req.user.id;
-        
+        console.log(productExist);
+        console.log(uid)
         if (productExist) {
+            console.log("entra por aqui")
             
             if (!(productExist.owner === uid)) {
 

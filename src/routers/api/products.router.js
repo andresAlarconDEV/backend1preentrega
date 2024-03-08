@@ -37,7 +37,7 @@ router.get('/products/:pid([a-zA-Z0-9]+)', authMiddleware("jwt"), async (req, re
 });
 
 
-router.put('/products/:pid', authMiddleware("jwt"), authRolesMiddleware(['admin']), async (req, res) => {
+router.put('/products/:pid', authMiddleware("jwt"), authRolesMiddleware(['admin','premium']), async (req, res) => {
     const { pid } = req.params;
     const { body } = req;
     try {
