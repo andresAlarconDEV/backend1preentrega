@@ -57,7 +57,7 @@ export const generateToken = (user) => {
         email: user.email,
         role: user.role,
         carts: user.carts
-      };
+    };
     return JWT.sign(payload, JWT_SECRET, { expiresIn: '15m' });
 }
 
@@ -102,7 +102,7 @@ export const authMiddleware = (strategy) => (req, res, next) => {
         }
         if (!payload) {
             console.log(info.message);
-            return res.status(401).json({ message: info.message ? res.redirect('/login') : info.toString() });
+            return res.status(401).json({ message: info.message ? info.message : info.toString() });
         }
         req.user = payload;
         next();
@@ -131,5 +131,5 @@ export const generateProduct = () => {
         stock: faker.number.int({ min: 1, max: 999 }),
         thumbnail: faker.image.url(),
         status: faker.datatype.boolean()
-      }
+    }
 }

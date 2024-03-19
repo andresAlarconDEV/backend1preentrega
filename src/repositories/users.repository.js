@@ -32,4 +32,8 @@ export default class UserRepository {
         return this.dao.putChangeRole(uid, role);
     }
 
+    updateById(uid, object){
+        return this.dao.updateById(uid, object);
+    }
+
 }

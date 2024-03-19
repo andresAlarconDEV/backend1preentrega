@@ -98,6 +98,8 @@ export default class UsersController {
                     code: EnumsError.UNAUTHORIZED_ERROR
                 });
             };
+            const last_connection = Date.now();
+            await UsersService.updateById(user._id,{"last_connection": last_connection})
             return user;
         }
     }

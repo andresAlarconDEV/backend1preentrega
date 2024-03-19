@@ -31,4 +31,8 @@ export default class UsersService {
     static putChangeRole (uid, role){
         return usersRepository.putChangeRole(uid, role);
     }
+
+    static updateById (uid, object){
+        return usersRepository.updateById(uid, object);
+    }
 }

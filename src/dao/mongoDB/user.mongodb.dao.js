@@ -27,6 +27,10 @@ export default class UserDaoMongoDB {
     }
     static putChangeRole (uid, role){
         return UserModel.updateOne({_id: uid }, {$set: {role: role}});
-    }    
+    }
+    
+    static updateById (uid, object){
+        return UserModel.updateOne({_id: uid }, {$set: object })
+    }
     
 }

@@ -16,6 +16,7 @@ router.post('/sessions/login', async (req, res, next) => {
   try {
     const user = await UsersController.getLoginUser(req.body);
     const token = generateToken(user);
+    
     res.cookie('token', token, {
       maxAge: 1000 * 900,
       httpOnly: true,
@@ -28,8 +29,6 @@ router.post('/sessions/login', async (req, res, next) => {
   }
  
 });
-
-
 
 
 router.post('/sessions/register', async (req, res, next) => {
@@ -46,18 +45,14 @@ router.get('/sessions/current', authMiddleware('jwt'), async (req, res) => {
     // if (!req.user) {
     //     return res.status(401).json({message: 'No esta autenticado'})
     // }
+    console.log("entro");
     const user = await UsersController.getById(req.user.id);
     const userDTO = new UserDTO(user);
     res.status(200).json(userDTO);
 });
 
-router.post('/session/logout', (req, res) => {
-    req.destroy((error) => {
-      if (error) {
-        return res.status(400).send(error.message);
-      }
-      res.status(200).json({message: 'Se cerro la sesión correctamente'});
-    });
+router.post('/session/logout',authMiddleware('jwt'), (req, res) => {
+  res.clearCookie('token').redirect('/login');
   })
 
   router.get('/sessions/github', passport.authenticate('github', {
