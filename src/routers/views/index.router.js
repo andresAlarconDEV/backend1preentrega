@@ -1,6 +1,4 @@
 import { Router }  from 'express';
-import { generateToken, generateRecoveryToken, validateRecoveryToken, authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
-import UsersController from '../../controllers/users.controller.js';
 
 const router = Router();
 
