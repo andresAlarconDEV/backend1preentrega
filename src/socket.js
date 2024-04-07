@@ -1,6 +1,5 @@
 import { Server } from "socket.io";
 import products from "./dao/Dao/productManager.js";
-import MessagesManager from "./dao/Dao/Messages.manager.js";
 import { logger } from "./config/logger.js";
 
 
