@@ -35,4 +35,12 @@ export default class UsersService {
     static updateById (uid, object){
         return usersRepository.updateById(uid, object);
     }
+
+    static deleteUserInactivity (uid){
+        return usersRepository.deleteUserInactivity(uid);
+    }
+
+    static getUserInactivity (date){
+        return usersRepository.getUserInactivity(date);
+    }
 }

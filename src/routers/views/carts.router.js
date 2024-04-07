@@ -1,16 +1,43 @@
-import { Router }  from 'express';
-import CartsManager from '../../dao/Dao/Carts.manager.js';
+import { Router } from 'express';
 import CartsController from '../../controllers/carts.controller.js'
 import { buildResponseProductsInCart } from '../../utils/utils2.js';
+import { authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
 
 const router = Router();
+
+router.use('/addProductInCart/:pid', authMiddleware("jwt"), async (req, res) => {
+    const { cid, pid } = req.params;
+    try {
+        await CartsController.addProductInCart(cid, pid, req);
+        res.redirect("/products");
+    }
+    catch (error) {
+        res.redirect("/products");
+    }
+});
+
 
 router.use('/:cid', async (req, res) => {
     const endpoint = 'carts/:cid';
     const { cid } = req.params;
-    const data = await CartsController.getCartById(cid);
-    const dataProduct = buildResponseProductsInCart(data);
-    res.render('cart', {title: 'listado de productos del carrito: ', ...dataProduct});
+    try {
+        const data = await CartsController.getCartById(cid);
+        const dataProduct = buildResponseProductsInCart(data);
+        res.render('cart', { title: 'listado de productos del carrito: ', ...dataProduct });
+    } catch (err) {
+        console.log(err);
+        res.redirect("/");
+    }
+});
+
+router.post('/:cid/purchase', authMiddleware("jwt"), authRolesMiddleware(['user']), async (req, res) => {
+    try {
+        const ticket = await CartsController.postPurchase(req);
+        res.render('ticket', { title: 'Ticket de compra: ', ticket: ticket });
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
 });
 
 

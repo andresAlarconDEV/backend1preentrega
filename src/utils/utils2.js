@@ -37,7 +37,7 @@ export const buildResponsePaginated = (data) => {
 };
 
 export const buildResponseProductsInCart = (data) => {
-    const dataTemp = data[0];
+    const dataTemp = data;
     const { _id, products } = dataTemp;
     return {
         _id,

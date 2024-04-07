@@ -1,8 +1,10 @@
 import UsersService from "../services/user.service.js";
 import { createHash, isValidPassword } from '../utils/utils2.js'
 import { CustomError } from "../utils/CustomError.js";
-import { generatorUserError, generatorLoginError, generatorEmailError, changePassError } from "../utils/CauseMessageError.js";
+import { generatorUserIdError,generatorUserError, generatorLoginError, generatorEmailError, changePassError } from "../utils/CauseMessageError.js";
 import EnumsError from "../utils/EnumsError.js";
+import UsersDTO from "../dto/users.dto.js";
+import EmailService from "../services/email.service.js";
 
 const localAdmin = {
     email: 'adminCoder@coder.com',
@@ -12,8 +14,11 @@ const localAdmin = {
 
 export default class UsersController {
 
-    static getAll() {
-        return UsersService.getAll();
+    static async getAll() {
+        const users = await UsersService.getAll();
+        const usersDTO = new UsersDTO(users);
+        // return users;
+        return usersDTO.users;
     }
 
     static async getByEmail(email) {
@@ -43,7 +48,7 @@ export default class UsersController {
             body: { first_name,
                 last_name,
                 age,
-                role,
+                role = 'user',
                 cart,
                 email,
                 password }, } = req;
@@ -73,6 +78,9 @@ export default class UsersController {
         return createUser;
     }
 
+    static async usersDelete(uid){
+        await UsersService.deleteUserInactivity(uid);
+    }
     static async getLoginUser(body) {
         const { email, password } = body;
         if (localAdmin.email === email && localAdmin.password === password) {
@@ -99,7 +107,7 @@ export default class UsersController {
                 });
             };
             const last_connection = Date.now();
-            await UsersService.updateById(user._id,{"last_connection": last_connection})
+            await UsersService.updateById(user._id, { "last_connection": last_connection })
             return user;
         }
     }
@@ -110,7 +118,7 @@ export default class UsersController {
             const user = await UsersService.getByEmail(email);
             const isNotValidPass = isValidPassword(password, user);
             if (!isNotValidPass) {
-            const passwordChange = createHash(password);
+                const passwordChange = createHash(password);
                 await UsersService.postChangePass(email, passwordChange);
                 console.log("se cambio la contraseña");
                 return ("OK")
@@ -133,25 +141,68 @@ export default class UsersController {
         }
     }
 
-    static async changeRole(uid){
+    static async changeRole(uid) {
         const user = await UsersService.getById(uid);
         let response;
-        if (user.role === "premium"){
+        if (user.role === "premium") {
             await UsersService.putChangeRole(uid, "user");
             response = "user";
-        }else if (user.role === "user"){
+        } else if (user.role === "user") {
             await UsersService.putChangeRole(uid, "premium");
             response = "premium";
-        }else{
+        } else {
             CustomError.create({
                 name: 'Invalid Role',
-                cause: changePassError(uid),
-                message: 'Error en el rol de usuario, no se puee cambiar',
-                code: EnumsError.UNAUTHORIZED_ERROR
+                cause: generatorUserIdError(uid),
+                message: 'Error en el rol de usuario, no se puede cambiar',
+                code: EnumsError.UNAUTHORIZED_ERROR,
             });
         }
         return response;
+    }
 
+    static async deleteUserInactivity() {
+        const limitConnection = new Date();
+        limitConnection.setDate(limitConnection.getDate() - 2);
+        const usersDelete = await UsersService.getUserInactivity(limitConnection);
+
+        if (usersDelete.length >= 1) {
+            const emailService = EmailService.getInstance();
+            usersDelete.map(async (u) => {
+                const result = await emailService.sendEmail(
+                    u.email,
+                    'Se ha realizado la eliminación de su usuario por inactividad',
+                    `<!DOCTYPE html>
+                      <html lang="es">
+                      <head>
+                          <meta charset="UTF-8">
+                          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                          <title>Eliminación de usuario</title>
+                      </head>
+                      <body style="font-family: Arial, sans-serif;">
+                          <p>Hola,</p>
+                          <p>Su usuario ha sido eliminado de BikeShop por inactividad.</p>
+                          <p>Puede volver a registrarse para volver a usar nuestros servicios.</p>
+                      </body>
+                      </html>`);
+            await UsersService.deleteUserInactivity(u._id);
+                    })
+                    return 'Se han eliminado ',usersDelete.length,' usuarios';
+
+
+        } else {
+            CustomError.create({
+                name: 'Not found users',
+                cause: generatorEmailError({
+                    fechaInactividad: limitConnection
+                }),
+                message: 'No hay usuarios inactivos',
+                code: EnumsError.NOTFOUND_ERROR,
+            });
+        }
+        // const usersDelete = await UsersService.deleteUserInactivity(limitConnection);
+        console.log("usersDelete", usersDelete);
+        return usersDelete;
     }
 
 }

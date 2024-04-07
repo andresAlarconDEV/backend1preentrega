@@ -9,7 +9,7 @@ export default class CartRepository {
     }
 
     getCartById(cid){
-        return this.dao.getCartById(cid);
+        return this.dao.getCartById(cid).populate('products.idProduct');
     }
 
     addCart(newCart) {

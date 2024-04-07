@@ -1,0 +1,32 @@
+<container>
+    <header>
+        <h1>Te damos la bienvenida 😁</h1>
+        <a href="/logout" role="button" class="buttonLogout">Salir</a>
+    </header>
+</container>
+<H1>Listado de Usuarios</H1>
+<table class="table table-info table-striped">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col">Nombre Completo</th>
+            <th scope="col">Email</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Cambiar Rol</th>
+            <th scope="col">Eliminar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {{#each users}}
+        
+        <tr>
+            <th scope="row">{{this.fullname}}</th>
+            <td>{{this.email}}</td>
+            <td>{{this.role}}</td>
+            {{!-- <td>{{this.id}}</td> --}}
+            <td><a href="/users/changeRole/{{this.id}}" role="button" class="buttonLogout">Cambiar</a></td>
+            <td><a href="/users/deleteUser/{{this.id}}" role="button" class="buttonLogout">Eliminar</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -36,4 +36,13 @@ export default class UserRepository {
         return this.dao.updateById(uid, object);
     }
 
+    deleteUserInactivity(uid){
+        return this.dao.deleteUserInactivity(uid);
+    }
+
+    getUserInactivity(date){
+        return this.dao.getUserInactivity(date);
+    }
+
+
 }

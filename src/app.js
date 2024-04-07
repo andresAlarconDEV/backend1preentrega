@@ -22,10 +22,13 @@ import productsRouter from './routers/views/products.router.js';
 import cartsRouter from './routers/views/carts.router.js';
 import notFoundRouter from './routers/views/notFound.router.js';
 import sessionsRouter from './routers/api/sessions.router.js';
+import userRouter from './routers/api/users.router.js';
+import usersRouter from './routers/views/users.router.js';
 import indexRouter from './routers/views/index.router.js';
 import notificationRouter from './routers/api/notifications.router.js';
 import mockingRouter from './routers/api/mocking.router.js';
 import loggerRouter from './routers/api/logger.router.js';
+
 
 const app = express();
 // const SESSION_SECRET = config.sessionSecret;
@@ -70,10 +73,11 @@ const swaggerOpts = {
 const specs = swaggerJsDoc(swaggerOpts);
 app.use('/api-swagger', swaggerUi.serve, swaggerUi.setup(specs));
 
-app.use('/api', productRouter, cartRouter, sessionsRouter);
+app.use('/api', productRouter, cartRouter, sessionsRouter, userRouter);
 app.use('/carts', cartsRouter);
 app.use('/chat', messageRouter);
 app.use('/products', productsRouter);
+app.use('/users', usersRouter);
 app.use('/realtimeproducts', realTimeProductsRouter);
 app.use('/home', homeRouter);
 app.use('/notification', notificationRouter);
@@ -86,8 +90,3 @@ app.use('/*', notFoundRouter);
 app.use(errorHandlerMiddleware);
 
 export default app;
-    
-    
-        
-        
-        

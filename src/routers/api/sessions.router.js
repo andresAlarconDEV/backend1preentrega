@@ -16,18 +16,18 @@ router.post('/sessions/login', async (req, res, next) => {
   try {
     const user = await UsersController.getLoginUser(req.body);
     const token = generateToken(user);
-    
+
     res.cookie('token', token, {
       maxAge: 1000 * 900,
       httpOnly: true,
     })
       .status(200)
-      .json({ status: 'success' })
-      // .redirect('/products');
+      // .json({ status: 'success' })
+    .redirect('/products');
   } catch (error) {
     next(error)
   }
- 
+
 });
 
 
@@ -42,38 +42,35 @@ router.post('/sessions/register', async (req, res, next) => {
 
 
 router.get('/sessions/current', authMiddleware('jwt'), async (req, res) => {
-    // if (!req.user) {
-    //     return res.status(401).json({message: 'No esta autenticado'})
-    // }
-    console.log("entro");
-    const user = await UsersController.getById(req.user.id);
-    const userDTO = new UserDTO(user);
-    res.status(200).json(userDTO);
+
+  const user = await UsersController.getById(req.user.id);
+  const userDTO = new UserDTO(user);
+  res.status(200).json(userDTO);
 });
 
-router.post('/session/logout',authMiddleware('jwt'), (req, res) => {
+router.post('/sessions/logout', authMiddleware('jwt'), (req, res) => {
   res.clearCookie('token').redirect('/login');
-  })
+})
 
-  router.get('/sessions/github', passport.authenticate('github', {
-    scope: ['user: email']
-  }));
+router.get('/sessions/github', passport.authenticate('github', {
+  scope: ['user: email']
+}));
 
-  router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect('/products');
-  });
+router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+  res.redirect('/products');
+});
 
 
-  router.post('/sessions/recovery', async (req, res, next) => {
-    const { email } = req.body;
-    try {
-      const user = await UsersController.getByEmail(email);
-      const emailService = EmailService.getInstance();
-      const token = generateRecoveryToken(email);
-      const result = await emailService.sendEmail(
-        email,
-        'Recuperación de contraseña - BikeShop',
-        `<!DOCTYPE html>
+router.post('/sessions/recovery', async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const user = await UsersController.getByEmail(email);
+    const emailService = EmailService.getInstance();
+    const token = generateRecoveryToken(email);
+    const result = await emailService.sendEmail(
+      email,
+      'Recuperación de contraseña - BikeShop',
+      `<!DOCTYPE html>
         <html lang="es">
         <head>
             <meta charset="UTF-8">
@@ -89,41 +86,33 @@ router.post('/session/logout',authMiddleware('jwt'), (req, res) => {
             <p>Saludos,<br>BikeShop</p>
         </body>
         </html>`);
-      res.status(200).render('recovery', {title: 'Recuperar contraseña', success: 'se ha enviado un correo con el link de recuperación'});
-      // res.status(200).redirect('recovery');
-    } catch (error) {
-      res.render('recovery', {title: 'Recuperar contraseña', error: error.message});
+    res.status(200).render('recovery', { title: 'Recuperar contraseña', success: 'se ha enviado un correo con el link de recuperación' });
+    // res.status(200).redirect('recovery');
+  } catch (error) {
+    res.render('recovery', { title: 'Recuperar contraseña', error: error.message });
+  }
+});
+
+
+router.post('/sessions/changePass', async (req, res) => {
+  const { token } = req.query;
+  const { body } = req;
+
+  try {
+    const payload = await validateRecoveryToken(token);
+    const { email } = payload;
+    const responseChange = await UsersController.postChangePass(email, body);
+    res.status(200).redirect('/confirmPass');
+  } catch (error) {
+    if (error.code === 8) {
+      res.redirect('/recovery');
+    } else {
+      res.render('changePass', { title: 'Recuperar contraseña', error: error.message });
     }
-  });
+  }
 
+});
 
-  router.post('/sessions/changePass', async (req, res) => {
-    const { token } = req.query;
-    const { body } = req;
-
-    try{
-      const payload = await validateRecoveryToken(token);
-      const { email } = payload;
-      const responseChange = await UsersController.postChangePass(email, body);
-            res.status(200).redirect('/confirmPass');
-    }catch(error){
-      if (error.code === 8){
-        res.redirect('/recovery');
-      }else{
-      res.render('changePass', {title: 'Recuperar contraseña', error: error.message});
-    }}
-
-  });
-
-  router.put('/users/premium/:uid',authMiddleware("jwt"), authRolesMiddleware(['admin']), async (req, res) => {
-    const { uid } = req.params;
-    try{
-    const role = await UsersController.changeRole(uid);
-    res.status(201).json({message: `Se realizo el cambio del rol por ${role}`});
-    }catch(error){
-      res.status(404).send(error.message);
-    }
-  })
 
 
 export default router;

@@ -32,5 +32,13 @@ export default class UserDaoMongoDB {
     static updateById (uid, object){
         return UserModel.updateOne({_id: uid }, {$set: object })
     }
-    
+
+    static async deleteUserInactivity (uid){
+        return UserModel.deleteOne({_id: uid});
+        // return UserModel.deleteMany({last_connection: {$lt: date}});
+    }
+
+    static async getUserInactivity (date){
+        return UserModel.find({last_connection: {$lt: date}});
+    }
 }

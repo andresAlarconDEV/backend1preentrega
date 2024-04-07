@@ -1,6 +1,12 @@
 <container>
     <header>
         <h1>Te damos la bienvenida 😁</h1>
+        {{#if admin}}
+        <a href="/users" role="button" class="buttonLogout">Usuarios</a>
+        {{/if}}
+        {{#if cart}}
+        <a href="/carts/{{cart}}" role="button" class="buttonLogout">Ver Carrito</a>
+        {{/if}}
         <a href="/logout" role="button" class="buttonLogout">Salir</a>
     </header>
     <p><strong>Nombre:</strong> {{user.first_name}}</p>
@@ -32,7 +38,7 @@
             <td>{{this.description}}</td>
             <td>{{this.price}}</td>
             <td>{{this.stock}}</td>
-            <td><button type="button" class="btn btn-primary btn-sm">Agregar al carrito</button></td>
+            <td><a href="/carts/addProductInCart/{{this._id}}">Agregar a Carrito</a></td>
         </tr>
         {{/if}}
         {{/each}}

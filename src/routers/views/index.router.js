@@ -1,4 +1,6 @@
 import { Router }  from 'express';
+import { generateToken, generateRecoveryToken, validateRecoveryToken, authMiddleware, authRolesMiddleware } from '../../utils/utils2.js';
+import UsersController from '../../controllers/users.controller.js';
 
 const router = Router();
 
@@ -24,24 +26,19 @@ router.use('/confirmPass', async (req, res) => {
   res.render('confirmPass', {title: 'Se ha cambiado la contraseña'});
 });
 
-router.use('/profile', async (req, res) => {
-    if (!req.user) {
-        // return res.status(401).json({message: 'No esta autenticado'})
-        res.redirect('/login');
-    }else {
-    res.render('profile', req.user.toJSON());
-    }
-});
+// router.use('/profile', async (req, res) => {
+//     if (!req.user) {
+//         // return res.status(401).json({message: 'No esta autenticado'})
+//         res.redirect('/login');
+//     }else {
+//     res.render('profile', req.user.toJSON());
+//     }
+// });
 
 router.get('/logout', (req, res) => {
-    req.logout((error) => {
-      if (error) {
-        // return res.render('login', { title: 'Hello People 🖐️', messageError: error.message });
-        return res.render('login', {message: error, failed: true });
-      }
-      res.redirect('/login');
-    });
-  })
+  res.clearCookie('token').redirect('/login');
+  });
+
 
   router.use('/', async (req, res) => {
     res.render('login', {title: 'Login'});

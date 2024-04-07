@@ -1,12 +1,11 @@
 import CartsService from "../services/cart.service.js";
 import ProductsService from "../services/product.service.js";
-import { buildResponsePaginated } from '../utils/utils2.js';
 import UsersService from "../services/user.service.js";
 import TicketsController from "./tickets.controller.js";
 import { CustomError } from "../utils/CustomError.js";
-import { generatorLoginError,generatorUserIdError } from "../utils/CauseMessageError.js";
+import { generatorLoginError, generatorUserIdError } from "../utils/CauseMessageError.js";
 import EnumsError from "../utils/EnumsError.js";
-// import
+import UsersController from './users.controller.js';
 
 export default class CartsController {
 
@@ -28,11 +27,19 @@ export default class CartsController {
     static async addProductInCart(cid, pid, req) {
         let productExist = await ProductsService.getProductById(pid);
         const uid = req.user.id;
-        console.log(productExist);
-        console.log(uid)
+        const user = await UsersController.getById(uid);
+        console.log(uid);
+        if (!cid) {
+            if (!user.carts.length >= 1) {
+                const cartCreate = await this.addCart(req);
+                cid = cartCreate;
+            }else{
+                cid = user.carts[0].idCart;
+            }
+        }
+
         if (productExist) {
-            console.log("entra por aqui")
-            
+
             if (!(productExist.owner === uid)) {
 
                 let cartExist = await CartsService.getCartById(cid);
@@ -53,7 +60,7 @@ export default class CartsController {
                 } else {
                     throw new Error('No existe el carrito con el ID ' + cid);
                 }
-            }else{
+            } else {
                 CustomError.create({
                     name: 'Permiso no autorizado',
                     cause: generatorLoginError(productExist.owner),

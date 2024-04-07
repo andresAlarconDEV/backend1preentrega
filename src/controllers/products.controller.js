@@ -3,6 +3,8 @@ import { buildResponsePaginated } from '../utils/utils2.js';
 import { CustomError } from "../utils/CustomError.js";
 import { generatorLoginError,generatorUserIdError } from "../utils/CauseMessageError.js";
 import EnumsError from "../utils/EnumsError.js";
+import EmailService from "../services/email.service.js";
+import UsersController from "./users.controller.js";
 
 export default class ProductsController {
 
@@ -79,10 +81,29 @@ export default class ProductsController {
 
         const product = await ProductsService.getProductById(pid);
         if (product) {
-            const { id, role } = req.user;
+            const { id, role, email } = req.user;
 
             if (role === "admin" || product.owner === id) {
                 await ProductsService.deleteProduct(pid);
+                if (product.owner){
+                    const user = await UsersController.getById(product.owner);
+                    const emailService = EmailService.getInstance();
+                    const result = await emailService.sendEmail(
+                        user.email,
+                        'Se ha realizado la eliminación de su producto '+ product.title,
+                        `<!DOCTYPE html>
+                          <html lang="es">
+                          <head>
+                              <meta charset="UTF-8">
+                              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                              <title>Eliminación de producto</title>
+                          </head>
+                          <body style="font-family: Arial, sans-serif;">
+                              <p>Hola,</p>
+                              <p>Su producto ha sido eliminado de BikeShop.</p>
+                          </body>
+                          </html>`);
+                }
             } else {
                 CustomError.create({
                     name: 'Invalid permissions',
