@@ -1,30 +1,5 @@
 <H1>{{title}}{{_id}}</H1>
+<H2>su orden de compra esta por un valor de {{ticket.amount}}.</H2>
+<H2>Se ha realizado su pedido con el codigo {{ticket.code}}.</H2>
+<H2>Gracias por realizar su compra.</H2>
 <a href="/products" role="button" class="button">Volver al inicio</a>
-<table class="table table-info table-striped">
-    <thead>
-        <tr class="table-dark">
-            <th scope="col">codigo</th>
-            <th scope="col">categoria</th>
-            <th scope="col">Titulo</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Stock</th>
-            <th scope="col">Cantidad</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each products}}
-        {{#if this.idProduct.status}}
-        <tr>
-            <th scope="row">{{this.idProduct.code}}</th>
-            <td>{{this.idProduct.category}}</td>
-            <td>{{this.idProduct.title}}</td>
-            <td>{{this.idProduct.description}}</td>
-            <td>{{this.idProduct.price}}</td>
-            <td>{{this.idProduct.stock}}</td>
-            <td>{{this.quantity}}</td>
-        </tr>
-        {{/if}}
-        {{/each}}
-    </tbody>
-</table>

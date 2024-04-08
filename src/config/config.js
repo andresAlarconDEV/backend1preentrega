@@ -11,7 +11,7 @@ export default {
     githubClientID: process.env.GITHUB_CLIENTID || 'testGitHub',
     githubClientSecret: process.env.GITHUB_CLIENTSECRET || 'testGitHub',
     githubCallbackURL: process.env.URLBASE+process.env.PORT+process.env.GITGUB_CALLBACKURL || 'testGitHub',
-    urlBase: process.env.URLBASE+process.env.PORT+'/',
+    urlBase: process.env.URLBASE || 'https://backend1preentrega-production.up.railway.app/',
     persistence: process.env.PERSISTENCE || 'mongoDB',
     email: {emailUser: process.env.EMAIL_USER,
     emailPassword: process.env.EMAIL_PASSWORD,

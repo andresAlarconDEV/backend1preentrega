@@ -16,6 +16,17 @@ router.use('/addProductInCart/:pid', authMiddleware("jwt"), async (req, res) => 
     }
 });
 
+router.use('/:cid/purchase', authMiddleware("jwt"), async (req, res) => {
+    try {
+        const ticket = await CartsController.postPurchase(req);
+        console.log("ticket", ticket);
+        res.render('ticket', { title: 'Ticket de compra: ', ticket: ticket.ticketInfo.toJSON() });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(404).send(error.message);
+    }
+});
 
 router.use('/:cid', async (req, res) => {
     const endpoint = 'carts/:cid';
@@ -30,15 +41,6 @@ router.use('/:cid', async (req, res) => {
     }
 });
 
-router.post('/:cid/purchase', authMiddleware("jwt"), authRolesMiddleware(['user']), async (req, res) => {
-    try {
-        const ticket = await CartsController.postPurchase(req);
-        res.render('ticket', { title: 'Ticket de compra: ', ticket: ticket });
-    }
-    catch (error) {
-        res.status(404).send(error.message);
-    }
-});
 
 
 export default router;
