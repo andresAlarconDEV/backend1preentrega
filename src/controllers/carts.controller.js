@@ -117,11 +117,13 @@ export default class CartsController {
     static async postPurchase(req) {
         const { cid } = req.params;
         const email = req.user.email;
-        const cartsUser = req.user.carts;
+        const uid = req.user.id;
+        const user = await UsersController.getById(uid);
+        const cartsUser = user.carts;
         let productNoStock = [];
         let productStock = [];
         let responseTicket = {};
-        const cartFind = cartsUser.find((e) => e.idCart === cid);
+        const cartFind = cartsUser.find((e) => e.idCart.toString() === cid);
         if (cartFind) {
             const cart = await CartsService.getCartById(cid);
             if (cart.products.length >= 1) {

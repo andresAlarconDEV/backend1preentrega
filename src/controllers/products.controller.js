@@ -103,6 +103,7 @@ export default class ProductsController {
                               <p>Su producto ha sido eliminado de BikeShop.</p>
                           </body>
                           </html>`);
+                          console.log("ResultMail: "+ result);
                 }
             } else {
                 CustomError.create({

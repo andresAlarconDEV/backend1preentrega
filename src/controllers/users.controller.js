@@ -75,7 +75,7 @@ export default class UsersController {
             cart,
         };
         const createUser = await UsersService.postUser(user);
-        return createUser;
+        return "Se ha realizado la creación del usuario con email "+ createUser.email;
     }
 
     static async usersDelete(uid){
